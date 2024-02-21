@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
+</head>
+<body>
+
+    <div id="welcomeContainer">
+        <h2 style="color: #bae8e8;">Welcome!</h2>
+        <p style="color: #ffffff;">Please select an option:</p>
+
+        <div class="button-container">
+            <button onclick="showLoginForm()">Login</button>
+            <button onclick="showSignupForm()">Sign Up</button>
+        </div>
+
+        <form id="loginForm" class="form" method = "POST">
+          {% csrf_token %}
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="loginUsername" required>
+
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="loginPassword" required>
+
+            <button type="button" onclick="login()">Login</button>
+        </form>
+
+        <form id="signupForm" class="form">
+            <label for="signupUsername">Username:</label>
+            <input type="text" id="signupUsername" name="signupUsername" required>
+
+            <label for="signupEmail">Email:</label>
+            <input type="email" id="signupEmail" name="signupEmail" required>
+
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" name="signupPassword" required>
+
+            <button type="button" onclick="signup()">Sign Up</button>
+        </form>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

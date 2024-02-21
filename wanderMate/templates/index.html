@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderMate</title>
+    <!--ICONSCOUT CDN-->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <!--Stylesheet-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h2 class="logo">
+                WanderMate
+            </h2>
+            <div class="searchbar">
+                <!--Search icon link-->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" id="search"><path fill="#200E32" d="M15.6207067,15.6542822 C16.0072308,15.270377 16.6268293,15.270377 17.0133534,15.6542822 L17.0133534,15.6542822 L19.5680176,17.7164156 L19.6123694,17.7164156 C20.1292102,18.2388171 20.1292102,19.0857973 19.6123694,19.6081989 C19.0955285,20.1306004 18.2575639,20.1306004 17.7407231,19.6081989 L17.7407231,19.6081989 L15.6207067,17.1784678 L15.5402577,17.0876967 C15.390397,16.8980019 15.3076306,16.6615115 15.3076306,16.416375 C15.3076306,16.1303824 15.4202849,15.8561581 15.6207067,15.6542822 Z M8.57763961,-7.10542736e-15 C10.8525711,-7.10542736e-15 13.0343273,0.913436016 14.6429467,2.53936255 C16.2515662,4.16528909 17.1552792,6.37051871 17.1552792,8.66992606 C17.1552792,13.458194 13.3149392,17.3398521 8.57763961,17.3398521 C3.84034006,17.3398521 2.13162821e-14,13.458194 2.13162821e-14,8.66992606 C2.13162821e-14,3.88165812 3.84034006,-7.10542736e-15 8.57763961,-7.10542736e-15 Z" transform="translate(2 2)"></path></svg>
+                <input type="search" placeholder="Search for people & places">
+            </div>
+            <div class="create">
+                <label class="btn btn-primary" for="create-post">Create</label>
+                <div class="dp">
+                    <img src="dp2.jpg" alt="dp">
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+
+            <!--*****************LEFT*****************-->
+            
+            <div class="left">
+                <a class="profile">
+                <div class="dp">
+                    <img src="dp2.jpg">
+                </div>
+                <div class="handle">
+                    <h4>Rishika S Jain</h4>
+                    <p class="text-muted"> @rsjain
+                    </p>
+                </div>
+                <!--SIDEBAR-->
+                <div class="sidebar">
+                    <a class="menu-item active">
+                        <span><i class="uil uil-home"></i></span><h3>Home</h3>
+                    </a>
+                    <a class="menu-item">
+                        <span><i class="uil uil-compass"></i></span><h3>Explore</h3>
+                    </a>
+                    <a class="menu-item" id="notifications">
+                        <span><i class="uil uil-bell"><small class="notification-count">3+</small></i></span><h3>Notification</h3>
+                        <!----------------NOTIFICATION POPUP---------------------------->
+                        <div class="notifications-popup">
+                            <div>
+                                <div class="dp">
+                                    <img src="dp3.jpeg" alt="">
+                                </div>
+                                <div class="notifications-body">
+                                    <b>Nishmitha M</b> send you a message   
+                                    <small class="text-muted">2 DAYS AGO</small>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="dp">
+                                    <img src="dp4.png" alt="">
+                                </div>
+                                <div class="notifications-body">
+                                    <b>Pramada S H</b> waved at you
+                                    <small class="text-muted">2 DAYS AGO</small>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="dp">
+                                    <img src="dp5.jpeg" alt="">
+                                </div>
+                                <div class="notifications-body">
+                                    <b>Nakul U D </b>accepted your friend request
+                                    <small class="text-muted">2 DAYS AGO</small>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a class="menu-item" id="messages-notification">
+                        <span><i class="uil uil-envelope"><small class="notification-count">6</small></i></span><h3>Messages</h3>
+                    </a>
+                    <a class="menu-item" id="messages-notification">
+                        <span><i class="uil uil-palette"></i></span><h3>Theme</h3>
+                    </a>
+                    <a class="menu-item" id="messages-notification">
+                        <span><i class="uil uil-setting"></i></span><h3>Settings</h3>
+                    </a>
+                    <!--CREATE POST BUTTON-->
+                    <label for="create-post" class="btn btn-primary">Create Post</label>
+                </div>
+            </div>
+           <!--*****************************MIDDLE********************************-->
+            <div class="middle">
+                <!--------Story---------->
+                <div class="stories">
+                    <div class="story">
+                        <div class="dp">
+                            <img src="dp2.jpg" alt="">
+                        </div>
+                        <p class="name">Your Story</p>
+                    </div>
+                    <div class="story">
+                        <div class="dp">
+                            <img src="dp3.jpeg" alt="">
+                        </div>
+                        <p class="name">Nishmitha</p>
+                    </div>
+                    <div class="story">
+                        <div class="dp">
+                            <img src="dp4.png" alt="">
+                        </div>
+                        <p class="name">Pramada</p>
+                    </div>
+                    <div class="story">
+                        <div class="dp">
+                            <img src="dp5.jpeg" alt="">
+                        </div>
+                        <p class="name">Nakul</p>
+                    </div>
+                </div>
+                <!----END OF STORY------->
+                <form class="create-post">
+                    <div class="dp">
+                        <img src="dp2.jpg">
+                    </div>
+                    <input type="text" placeholder="What's on your mind, Rishika" id="create-post">
+                    <input type="submit" value="Post" class="btn btn-primary">
+                </form>
+                <!-------FEEDS--------->
+                <div class="feeds">
+                    <!--FEED !-->
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="dp">
+                                    <img src="dp2.jpg">
+                                </div>
+                                <div class="info">
+                                    <h3>Rishika S Jain</h3>
+                                    <small>Wayanad, 10 minutes ago</small>
+                                </div>
+                            </div>
+                            <span class="edit">
+                                <i class="uil uil-ellipsis-h"></i>
+                            </span>
+                        </div>
+
+                        <div class="photo">
+                            <img src="scenery.jpeg">
+                        </div> 
+                        <div class="action-button">
+                            <div class="interaction-buttons">
+                                <span><i class="uil-heart"></i></span>
+                                <span><i class="uil-comment-dots"></i></i></span>
+                                <span><i class="uil-share-alt"></i></i></span>
+                            </div>
+                            <div class="bookmark">
+                                <span><i class="uil-bookmark"></i></span>
+                            </div>                         
+                        </div>
+
+                        <div class="liked-by">
+                            <span><img src="dp3.jpeg"></span>
+                            <span><img src="dp4.png"></span>
+                            <span><img src="dp5.jpeg"></span>
+                            <p>Liked by <b>Nishmitha M</b> and 10 others</p>
+                        </div>
+                        <div class="caption">
+                            <p><b>Rishika S Jain</b> Blah blah blah <span class="hashtag">#nature</span></p>
+                        </div>
+                        <div class="text-muted">
+                            View all 10 comments
+                        </div>
+                    </div>
+                    <!--end of feed1-->
+                    <!--feed 2-->
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="dp">
+                                    <img src="dp5.jpeg">
+                                </div>
+                                <div class="info">
+                                    <h3>Nakul Uttarkar</h3>
+                                    <small>Mysore, 12 minutes ago</small>
+                                </div>
+                            </div>
+                            <span class="edit">
+                                <i class="uil uil-ellipsis-h"></i>
+                            </span>
+                        </div>
+
+                        <div class="photo">
+                            <img src="NnR.jpg">
+                        </div> 
+                        <div class="action-button">
+                            <div class="interaction-buttons">
+                                <span><i class="uil-heart"></i></span>
+                                <span><i class="uil-comment-dots"></i></i></span>
+                                <span><i class="uil-share-alt"></i></i></span>
+                            </div>
+                            <div class="bookmark">
+                                <span><i class="uil-bookmark"></i></span>
+                            </div>                         
+                        </div>
+
+                        <div class="liked-by">
+                            <span><img src="dp2.jpg"></span>
+                            <span><img src="dp4.png"></span>
+                            <span><img src="dp3.jpeg"></span>
+                            <p>Liked by <b>Rishika S Jain</b> and 1000 others</p>
+                        </div>
+                        <div class="caption">
+                            <!-- <p><b>Nakul Uttarkar </b>I love you Paapu <span class="hashtag">#worldsbestgf</span></p> -->
+                        </div>
+                        <div class="text-muted">
+                            View all 100 comments
+                        </div>
+                    </div>
+                    <!--emd of feed 2-->
+                </div>
+            </div> 
+            <!-------End of feed------------->
+            <!-----------------------RIGHT-------------->
+            <div class="right">
+                <div class="messages" id="messages">
+                    <div class="heading">
+                        <h4>Messages</h4><i class="uil-edit"></i>
+                    </div>
+                    <div class="searchbar">
+                        <i class="uil-search"></i>
+                        <input type="search" placeholder="search messages" id="message-search">
+                    </div>
+                    <div class="category">
+                        <h6 class="active">Primary</h6>
+                        <h6>General</h6>
+                        <h6 class="message-requests">Requests(5)</h6>
+                    </div>
+                    <!----------Message 1------------>
+                    <div class="message">
+                        <div class="dp">
+                            <img src="dp5.jpeg">
+                            <div class="active"></div>
+                        </div>
+                        <div class="meaasage-body">
+                            <h5>Nakul Uttarkar</h5>
+                            <p class="text-muted">Hai</p>
+                        </div>
+                    </div>
+                    <!--message 2---->
+                    <div class="message">
+                        <div class="dp">
+                            <img src="dp3.jpeg">
+                        </div>
+                        <div class="meaasage-body">
+                            <h5>Nishmitha M</h5>
+                            <p class="text-bold">2 new messages</p>
+                        </div>
+                    </div>
+                    <!---message 3---->
+                    <div class="message">
+                        <div class="dp">
+                            <img src="dp4.png">
+                        </div>
+                        <div class="meaasage-body">
+                            <h5>Pramada S H</h5>
+                            <p class="text-muted">Okkkk</p>
+                        </div>
+                    </div>
+                </div>
+                <!-------Friend requests------->
+                <div class="requests">
+                    <h4>Requests</h4>
+                    <!------request 1 --------->
+                    <div class="request">
+                        <div class="info">
+                            <div class="dp">
+                                <img src="dp4.png">
+                            </div>
+                            <div>
+                                <h5>daddyzprincess</h5>
+                                <p class="text-muted">
+                                    3 mutual friends
+                                </p>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
+                        </div>
+                    </div>
+                    <!-----request 2-------->
+                    <div class="request">
+                        <div class="info">
+                            <div class="dp">
+                                <img src="dp5.jpeg">
+                            </div>
+                            <div>
+                                <h5>riderboy</h5>
+                                <p class="text-muted">
+                                    0 mutual friends
+                                </p>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </main>
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+
+</html>
