@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponse
 from .models import Profile
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 def index(request):
@@ -45,6 +46,17 @@ def signin_signup(request):
             
         elif 'signin' in request.POST :
             print("Signin page")
+            email = request.POST['email']
+            password= request.POST['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                print("USer login")
+                return redirect('index')  # Redirect to the index page after successful login
+            else:
+                # Handle invalid login
+                print("invalid")
+                return render(request, 'signinSignup.html', {'error_message': 'Invalid username or password'})
 
 
 
