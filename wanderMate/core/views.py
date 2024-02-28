@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 def index(request):
     return render(request,'index.html')
 
+
 def getUser(request):
     users = User.objects.all()
     return render(request,'getUser.html',{'users':users})
@@ -20,12 +21,12 @@ def signin_signup(request):
         
         if 'signup' in request.POST:
 
-            print("hello world")
+            
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password']
             password2 = request.POST['password2']
-            print(username)
+            
             if password == password2:
                 if User.objects.filter(username = username).exists():
                     messages.info(request, 'Username Already Taken')
@@ -46,16 +47,18 @@ def signin_signup(request):
             
         elif 'signin' in request.POST :
             print("Signin page")
-            email = request.POST['email']
-            password= request.POST['password']
-            user = authenticate(request, email=email, password=password)
+            username = request.POST['username1']
+            print("hello")
+            password= request.POST['password1']
+            user = auth.authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
+                auth.login(request, user)
                 print("USer login")
                 return redirect('index')  # Redirect to the index page after successful login
             else:
                 # Handle invalid login
-                print("invalid")
+                messages.info(request, 'Invalid Username or password')
+                print(username)
                 return render(request, 'signinSignup.html', {'error_message': 'Invalid username or password'})
 
 
