@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from .models import Profile
 from django.contrib.auth import authenticate, login
 
 # Create your views here.
+@login_required(login_url='signinSignup')
 def index(request):
     return render(request,'index.html')
 
@@ -58,15 +60,18 @@ def signin_signup(request):
             else:
                 # Handle invalid login
                 messages.info(request, 'Invalid Username or password')
-                print(username)
+                
                 return render(request, 'signinSignup.html', {'error_message': 'Invalid username or password'})
 
 
 
     return render(request, 'signinSignup.html')
 
-def signin(request):
-    return render(request, 'signin.html')
+
+@login_required(login_url='signinSignup')
+def logout(request):
+    auth.logout(request)
+    return redirect('signinSignup')
 
 
 
