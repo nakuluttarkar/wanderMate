@@ -10,12 +10,13 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 @login_required(login_url='signinSignup')
 def index(request):
-    return render(request,'index.html')
+    return render(request,'index.html', {'user': request.user})
 
 
-def getUser(request):
-    users = User.objects.all()
-    return render(request,'getUser.html',{'users':users})
+@login_required(login_url='signinSignup')
+def settings(request):
+    return render(request, "settings.html")
+
 
 def signin_signup(request):
 
