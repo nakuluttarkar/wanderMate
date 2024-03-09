@@ -52,16 +52,16 @@ def verify_otp(request):
 
             try:
                 print(request.user)
-                # user_profile = Profile.objects.get(user=request.user)
+                user_profile = Profile.objects.get(user=request.user)
                 
-                # user_profile.otp_validated = True
-                # user_profile.save()
+                user_profile.otp_validated = True
+                user_profile.save()
                 # OTP is correct and valid
                 # You can now perform further actions, such as activating the user account
                 messages.success(request, 'OTP verified successfully.')
                 request.session.pop('otp')  # Remove the OTP from the session
                 request.session.pop('otp_generated_time')  # Remove the OTP generation time from the session
-                return redirect('signinSignup')  # Redirect to a success page
+                return redirect('index')  # Redirect to a success page
             except Profile.DoesNotExist:
                 messages.error(request, 'User profile not found')
         else:
@@ -99,30 +99,39 @@ def signin_signup(request):
                     
 
                     #OTP validation 
-                    otp = generate_otp()
-                    print(otp)
-                    send_otp_email(email,otp)
-                    request.session['otp'] = otp
-                    request.session['otp_generated_time'] = time.time()
-                    return redirect('verify_otp')
+                    
             else:
                 messages.info(request, 'Password not matching')
                 # return redirect('signinSignup')
             
         elif 'signin' in request.POST :
 
-            print("Signin page")
+            
             username = request.POST['username1']
-            print("hello")
+            
             password= request.POST['password1']
             user = auth.authenticate(username=username, password=password)
             if user is not None:
-                # profile = Profile.objects.filter(user = user).first()
-                # print(user_name)
-                # if profile and profile.otp_validated : 
-                auth.login(request, user)
                 
-                return redirect('index')  # Redirect to the index page after successful login
+                auth.login(request, user)
+                profile = Profile.objects.filter(user = user).first()
+                print(profile.otp_validated)
+                
+                if profile.otp_validated : 
+                    return redirect('index')
+                
+                else:
+                    user = User.objects.get(username = username)
+                    email = user.email
+                    otp = generate_otp()
+                    print(otp)
+                    send_otp_email(email,otp)
+                    request.session['otp'] = otp
+                    request.session['otp_generated_time'] = time.time()
+                    return redirect('verify_otp')
+                    
+                
+                  # Redirect to the index page after successful login
                 # else:
                     # messages.info(request, 'OTP validation required')
 
