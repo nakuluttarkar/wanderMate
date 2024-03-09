@@ -10,6 +10,8 @@ class Profile(models.Model):
     bio = models.TextField(blank = True)
     profile_img = models.ImageField(upload_to = 'profile_images', default= 'defaultProfImg.jpeg')
     location = models.CharField(max_length = 100, blank= True)
+    otp_validated = models.BooleanField(default = False)
+    
 
     def __str__(self):
         return self.user.username
