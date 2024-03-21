@@ -1,38 +1,9 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WanderMate</title>
-    <!--ICONSCOUT CDN-->
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-    <!--Stylesheet-->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %} 
 
-    <!-- Navbar -->
-    <nav>
-        <div class="container">
-            <h2 class="logo">
-                WanderMate
-            </h2>
-            <div class="searchbar">
-                <!--Search icon link-->
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" id="search"><path fill="#200E32" d="M15.6207067,15.6542822 C16.0072308,15.270377 16.6268293,15.270377 17.0133534,15.6542822 L17.0133534,15.6542822 L19.5680176,17.7164156 L19.6123694,17.7164156 C20.1292102,18.2388171 20.1292102,19.0857973 19.6123694,19.6081989 C19.0955285,20.1306004 18.2575639,20.1306004 17.7407231,19.6081989 L17.7407231,19.6081989 L15.6207067,17.1784678 L15.5402577,17.0876967 C15.390397,16.8980019 15.3076306,16.6615115 15.3076306,16.416375 C15.3076306,16.1303824 15.4202849,15.8561581 15.6207067,15.6542822 Z M8.57763961,-7.10542736e-15 C10.8525711,-7.10542736e-15 13.0343273,0.913436016 14.6429467,2.53936255 C16.2515662,4.16528909 17.1552792,6.37051871 17.1552792,8.66992606 C17.1552792,13.458194 13.3149392,17.3398521 8.57763961,17.3398521 C3.84034006,17.3398521 2.13162821e-14,13.458194 2.13162821e-14,8.66992606 C2.13162821e-14,3.88165812 3.84034006,-7.10542736e-15 8.57763961,-7.10542736e-15 Z" transform="translate(2 2)"></path></svg>
-                <input type="search" placeholder="Search for people & places">
-            </div>
-            <div class="create">
-                <label class="btn btn-primary" for="create-post"><a href="logout/" style="text-decoration: none; color:aliceblue ">logout</a></label>
-                <div class="dp">
-                    <img src="dp2.jpg" alt="dp">
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- end of Navbar -->
 
+
+{% block content %}
     <main>
         <div class="container">
 
@@ -97,7 +68,7 @@
                     <a class="menu-item" id="messages-notification">
                         <span><i class="uil uil-palette"></i></span><h3>Theme</h3>
                     </a>
-                    <a class="menu-item" id="messages-notification">
+                    <a class="menu-item" id="messages-notification" href="{% url 'core:settings' %}">
                         <span><i class="uil uil-setting"></i></span><h3>Settings</h3>
                     </a>
                     <!--CREATE POST BUTTON-->
@@ -333,7 +304,5 @@
                 </div>
             </div>
     </main>
-    <script src="{% static 'js/index.js' %}"></script>
-</body>
 
-</html>
+    {% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<hr>
+<div class="settings-container">
+    <h2>Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="settings-form-group">
+            <label class = "setting-label" for="first_name">First Name:</label>
+            <input type="text" value="{{user_profile.fname}}" id="first_name" name="first_name" required>
+        </div>
+        <div class="settings-form-group">
+            <label class = "setting-label" for="last_name">Last Name:</label>
+            <input type="text" value="{{user_profile.lname}}" id="last_name" name="last_name" required>
+        </div>
+        
+        <div class="settings-form-group">
+            <label class = "setting-label" for="bio">About Me:</label>
+            <textarea class="settings-text-area" id="bio" name="bio" required>{{user_profile.bio}}</textarea>
+        </div>
+        <div class="settings-form-group">
+            <label class = "setting-label" for="location">Location:</label>
+            <input type="text" id="location" value="{{user_profile.location}}" name="location" required>
+        </div>
+        <div class="settings-form-group">
+            <label for="profile_image">Profile Image:</label>
+            <!-- <img src="{{user_profile}}" alt=""> -->
+            <input type="file" id="profile_image" value="{{user_profile.profile_img}}" name="profile_image" accept="image/*" required>
+        </div>
+        
+        <button type="submit" class="settings-btn">Update Profile</button>
+    </form>
+</div>
+{% endblock %}
+

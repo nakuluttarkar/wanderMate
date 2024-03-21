@@ -108,8 +108,8 @@ def signin_signup(request):
 
             
             username = request.POST['username1']
-            
             password= request.POST['password1']
+            
             user = auth.authenticate(username=username, password=password)
             if user is not None:
                 
@@ -144,6 +144,34 @@ def signin_signup(request):
 
 
     return render(request, 'signinSignup.html')
+
+def settings(request):
+    user_profile = Profile.objects.get(user = request.user)
+
+    if request.method == 'POST':
+        if request.FILES.get('image') == None:
+            image = user_profile.profile_img
+
+        elif request.FILES.get('image') != None:
+            image = request.FILES.get('image')
+
+        fname = request.POST['first_name']
+        lname = request.POST['last_name']
+        bio = request.POST['bio']
+        location = request.POST['location']
+        
+        user_profile.fname = fname
+        user_profile.lname = lname
+        user_profile.bio = bio
+        user_profile.location = location
+        user_profile.save()
+
+        
+    
+
+
+    return render(request,'settings.html',{'user_profile':user_profile})
+
 
 
 @login_required(login_url='signinSignup')

@@ -6,9 +6,11 @@ User = get_user_model()
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
+    fname = models.TextField(max_length = 30, blank = True)
+    lname = models.TextField(max_length = 30, blank = True)
     id_user = models.IntegerField()
     bio = models.TextField(blank = True)
-    profile_img = models.ImageField(upload_to = 'profile_images', default= 'defaultProfImg.jpeg')
+    profile_img = models.ImageField(upload_to = 'profile_images')
     location = models.CharField(max_length = 100, blank= True)
     otp_validated = models.BooleanField(default = False)
     
