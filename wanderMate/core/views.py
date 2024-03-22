@@ -34,7 +34,9 @@ def is_valid_otp(otp_generated_time):
 # HomePage
 @login_required(login_url='core:signinSignup')
 def index(request):
-    return render(request,'index.html', {'user': request.user})
+    user_profile = Profile.objects.get(user = request.user)
+
+    return render(request,'index.html', {'user_profile': user_profile})
 
 # settings page (Profile editing)
 @login_required(login_url='core:signinSignup')
@@ -152,11 +154,11 @@ def settings(request):
     user_profile = Profile.objects.get(user = request.user)
 
     if request.method == 'POST':
-        if request.FILES.get('image') == None:
+        if request.FILES.get('profile_image') == None:
             image = user_profile.profile_img
 
-        elif request.FILES.get('image') != None:
-            image = request.FILES.get('image')
+        elif request.FILES.get('profile_image') != None:
+            image = request.FILES.get('profile_image')
 
         fname = request.POST['first_name']
         lname = request.POST['last_name']
@@ -167,6 +169,7 @@ def settings(request):
         user_profile.lname = lname
         user_profile.bio = bio
         user_profile.location = location
+        user_profile.profile_img = image
         user_profile.save()
 
         

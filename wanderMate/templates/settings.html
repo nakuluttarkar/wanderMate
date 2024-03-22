@@ -26,12 +26,12 @@
         </div>
         <div class="form-group">
             {% if user_profile.profile_img %}
-            <img src="{{user_profile.profile_img.url}}" alt="">
+            <img src = "{{user_profile.profile_img.url}}" style="width:200px ; height: 200px; border-radius: 150px;" alt="">
             {% else %}
-            <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+            <img src = "{% static 'image/defaultProfileImg.jpeg' %}" style="width:200px ; height: 200px; border-radius: 150px;" alt="">
             {% endif %}
             <label for="profile_image">Profile Image:</label>
-            <input type="file" id="profile_image" value="" name="profile_image" accept="image/*">
+            <input type="file" id="profile_image" value="{{user_profile.profile_img}}" name="profile_image" accept="image/*">
         </div>
         <br>
         <button type="submit" class="settings-btn">Update Profile</button>

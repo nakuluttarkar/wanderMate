@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% load static %} 
 
+{% block dp %}
+<div class="dp">
+    <a href="">
+        {% if user_profile.profile_img %}
+        <img src="{{user_profile.profile_img.url}}" alt="">
+        {% else %}
+        <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+        {% endif %}
+    </a>
+ </div>
+ {% endblock %}
+
 
 
 {% block content %}

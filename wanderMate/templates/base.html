@@ -26,9 +26,10 @@
             </div>
             <div class="create">
                 <label class="btn btn-primary" for="create-post"><a href="{% url 'core:logout' %}" style="text-decoration: none; color:aliceblue ">logout</a></label>
-                <div class="dp">
-                   <a href=""><img src="" alt="dp"></a> 
-                </div>
+                {% block dp %}
+
+                {% endblock %}
+
             </div>
         </div>
     </nav>
