@@ -24,14 +24,19 @@
             <label class = "setting-label" for="location">Location:</label>
             <input type="text" id="location" value="{{user_profile.location}}" name="location" required>
         </div>
-        <div class="settings-form-group">
+        <div class="form-group">
+            {% if user_profile.profile_img %}
+            <img src="{{user_profile.profile_img.url}}" alt="">
+            {% else %}
+            <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+            {% endif %}
             <label for="profile_image">Profile Image:</label>
-            <!-- <img src="{{user_profile}}" alt=""> -->
-            <input type="file" id="profile_image" value="{{user_profile.profile_img}}" name="profile_image" accept="image/*" required>
+            <input type="file" id="profile_image" value="" name="profile_image" accept="image/*">
         </div>
-        
+        <br>
         <button type="submit" class="settings-btn">Update Profile</button>
     </form>
 </div>
+
 {% endblock %}
 

@@ -32,12 +32,12 @@ def is_valid_otp(otp_generated_time):
 # Create your views here.
 
 # HomePage
-@login_required(login_url='signinSignup')
+@login_required(login_url='core:signinSignup')
 def index(request):
     return render(request,'index.html', {'user': request.user})
 
 # settings page (Profile editing)
-@login_required(login_url='signinSignup')
+@login_required(login_url='core:signinSignup')
 def settings(request):
     return render(request, "settings.html")
 
@@ -61,7 +61,7 @@ def verify_otp(request):
                 messages.success(request, 'OTP verified successfully.')
                 request.session.pop('otp')  # Remove the OTP from the session
                 request.session.pop('otp_generated_time')  # Remove the OTP generation time from the session
-                return redirect('index')  # Redirect to a success page
+                return redirect('core:index')  # Redirect to a success page
             except Profile.DoesNotExist:
                 messages.error(request, 'User profile not found')
         else:
@@ -86,7 +86,7 @@ def signin_signup(request):
             if password == password2:
                 if User.objects.filter(username = username).exists():
                     messages.info(request, 'Username Already Taken')
-                    return redirect('signinSignup')
+                    return redirect('core:signinSignup')
                 else:
                     user = User.objects.create_user(username = username, email = email, password = password)
                     user.save()
@@ -118,7 +118,7 @@ def signin_signup(request):
                 print(profile.otp_validated)
                 
                 if profile.otp_validated : 
-                    return redirect('index')
+                    return redirect('core:index')
                 
                 else:
                     user = User.objects.get(username = username)
@@ -128,7 +128,7 @@ def signin_signup(request):
                     send_otp_email(email,otp)
                     request.session['otp'] = otp
                     request.session['otp_generated_time'] = time.time()
-                    return redirect('verify_otp')
+                    return redirect('core:verify_otp')
                     
                 
                   # Redirect to the index page after successful login
@@ -145,6 +145,9 @@ def signin_signup(request):
 
     return render(request, 'signinSignup.html')
 
+# settings view
+
+@login_required(login_url='core:signinSignup')
 def settings(request):
     user_profile = Profile.objects.get(user = request.user)
 
@@ -174,10 +177,10 @@ def settings(request):
 
 
 
-@login_required(login_url='signinSignup')
+@login_required(login_url='core:signinSignup')
 def logout(request):
     auth.logout(request)
-    return redirect('signinSignup')
+    return redirect('core:signinSignup')
 
 
 
