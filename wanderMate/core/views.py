@@ -178,6 +178,11 @@ def settings(request):
 
     return render(request,'settings.html',{'user_profile':user_profile})
 
+@login_required(login_url='core:signinSignup')
+def create_post(request):
+    return render(request, 'create_post.html')
+
+
 
 
 @login_required(login_url='core:signinSignup')
