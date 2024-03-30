@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
-from .models import Profile
+from .models import Image, Profile, Post, LikePost
 from django.contrib.auth import authenticate, login
 import random
 import time 
@@ -17,7 +17,7 @@ def generate_otp():
 
 def send_otp_email(email,otp):
     subject = 'Your OTP for verification' 
-    message = f'Your OTP is: {otp}'
+    message = f'Your OTP is: {otp}. The OTP is valid for 10 minutes'
     from_email = 'wandermate.travel@gmail.com'
     recipient = [email]
     send_mail(subject,message,from_email, recipient)
@@ -34,9 +34,16 @@ def is_valid_otp(otp_generated_time):
 # HomePage
 @login_required(login_url='core:signinSignup')
 def index(request):
+
     user_profile = Profile.objects.get(user = request.user)
 
-    return render(request,'index.html', {'user_profile': user_profile})
+    posts = Post.objects.all()
+    for post in posts:
+        print(post.user)
+        print(post.caption)
+        print(post.images)
+    return render(request,'index.html', {'user_profile': user_profile,
+                                         'posts':posts})
 
 # settings page (Profile editing)
 @login_required(login_url='core:signinSignup')
@@ -172,15 +179,49 @@ def settings(request):
         user_profile.profile_img = image
         user_profile.save()
 
-        
-    
-
-
     return render(request,'settings.html',{'user_profile':user_profile})
 
 @login_required(login_url='core:signinSignup')
+def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id = post_id)
+
+    like_filter = LikePost.objects.filter(post_id = post_id, username = username).first()
+
+    if like_filter == None : 
+        new_like = LikePost.objects.create(post_id = post_id, username = username)
+        new_like.save()
+        post.no_of_likes += 1
+        post.save()
+        return 
+    
+    else:
+        like_filter.delete()
+        post.no_of_likes -= 1
+        post.save()
+        return 
+
+
+
+@login_required(login_url='core:signinSignup')
 def create_post(request):
-    return render(request, 'create_post.html')
+    if request.method == 'POST':
+        user = request.user.username
+        caption = request.POST['caption']
+        tag = request.POST['hashtag']
+        
+        post = Post.objects.create(user=user, caption=caption, tag=tag)
+
+        # Handle multiple image uploads
+        for image_file in request.FILES.getlist('image'):
+            image = Image.objects.create(image=image_file)
+            post.images.add(image)
+
+        return redirect('core:index')
+
+    return render(request, 'posts.html')
 
 
 

@@ -127,6 +127,8 @@
                 <!-------FEEDS--------->
                 <div class="feeds">
                     <!--FEED !-->
+                    {% for post in posts %}
+
                     <div class="feed">
                         <div class="head">
                             <div class="user">
@@ -134,7 +136,7 @@
                                     <img src="dp2.jpg">
                                 </div>
                                 <div class="info">
-                                    <h3>Rishika S Jain</h3>
+                                    <h3>{{post.user}}</h3>
                                     <small>Wayanad, 10 minutes ago</small>
                                 </div>
                             </div>
@@ -142,13 +144,14 @@
                                 <i class="uil uil-ellipsis-h"></i>
                             </span>
                         </div>
-
-                        <div class="photo">
-                            <img src="{% static scenary.jpeg%}">
+                        {% for image in post.images.all %}
+                        <div class="photo" style="align-items:center">
+                            <img src="{{ image.image.url }}" style = "width: 300px; height: 300px">
                         </div> 
+                        {% endfor %}
                         <div class="action-button">
                             <div class="interaction-buttons">
-                                <span><i class="uil-heart"></i></span>
+                                <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span>
                                 <span><i class="uil-comment-dots"></i></i></span>
                                 <span><i class="uil-share-alt"></i></i></span>
                             </div>
@@ -161,61 +164,27 @@
                             <span><img src="dp3.jpeg"></span>
                             <span><img src="dp4.png"></span>
                             <span><img src="dp5.jpeg"></span>
-                            <p>Liked by <b>Nishmitha M</b> and 10 others</p>
+                            {% if post.no_of_likes == 0 %}
+                            <p>No likes</p>
+                            {% elif post.no_of_likes == 1 %}
+                            <p>Liked by 1 person</p>
+                            {% else %}
+                            <p>Liked by {{post.no_of_likes}} people </p>
+                            {% endif %}
+
                         </div>
                         <div class="caption">
-                            <p><b>Rishika S Jain</b> Blah blah blah <span class="hashtag">#nature</span></p>
+                            <p><b>{{post.user}}</b> {{post.caption}} <span class="hashtag">#{{post.tag}}</span></p>
                         </div>
                         <div class="text-muted">
                             View all 10 comments
                         </div>
                     </div>
+
+                    {% endfor %}
+
                     <!--end of feed1-->
-                    <!--feed 2-->
-                    <div class="feed">
-                        <div class="head">
-                            <div class="user">
-                                <div class="dp">
-                                    <img src="dp5.jpeg">
-                                </div>
-                                <div class="info">
-                                    <h3>Nakul Uttarkar</h3>
-                                    <small>Mysore, 12 minutes ago</small>
-                                </div>
-                            </div>
-                            <span class="edit">
-                                <i class="uil uil-ellipsis-h"></i>
-                            </span>
-                        </div>
 
-                        <div class="photo">
-                            <img src="NnR.jpg">
-                        </div> 
-                        <div class="action-button">
-                            <div class="interaction-buttons">
-                                <span><i class="uil-heart"></i></span>
-                                <span><i class="uil-comment-dots"></i></i></span>
-                                <span><i class="uil-share-alt"></i></i></span>
-                            </div>
-                            <div class="bookmark">
-                                <span><i class="uil-bookmark"></i></span>
-                            </div>                         
-                        </div>
-
-                        <div class="liked-by">
-                            <span><img src="dp2.jpg"></span>
-                            <span><img src="dp4.png"></span>
-                            <span><img src="dp3.jpeg"></span>
-                            <p>Liked by <b>Rishika S Jain</b> and 1000 others</p>
-                        </div>
-                        <div class="caption">
-                            <!-- <p><b>Nakul Uttarkar </b>I love you Paapu <span class="hashtag">#worldsbestgf</span></p> -->
-                        </div>
-                        <div class="text-muted">
-                            View all 100 comments
-                        </div>
-                    </div>
-                    <!--emd of feed 2-->
                 </div>
             </div> 
             <!-------End of feed------------->

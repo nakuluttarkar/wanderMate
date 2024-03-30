@@ -20,10 +20,30 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
-# class Post(models.Model):
-#     id = models.UUIDField(primary_key = True)
-#     user = 
-#     image = 
-#     caption = 
-#     created_at = 
-#     no_of_likes = 
+class Post(models.Model):
+    id = models.UUIDField(primary_key = True, default = uuid.uuid4)
+    user = models.CharField(max_length = 100)
+    images = models.ManyToManyField('Image')
+    caption = models.TextField()
+    tag = models.CharField(max_length = 20, blank = True, null=True)
+    created_at = models.DateTimeField(default = datetime.now)
+    no_of_likes = models.IntegerField(default = 0)
+
+    def __str__(self):
+        return self.user
+    
+class Image(models.Model):
+    image = models.ImageField(upload_to='post_images', default='wanderMateLogo.png')
+
+    def __str__(self):
+        return self.image.name
+    
+
+class LikePost(models.Model):
+    post_id = models.CharField(max_length = 100)
+    username = models.CharField(max_length = 100)
+
+    def __str__(self):
+        return self.username 
+    
+    
