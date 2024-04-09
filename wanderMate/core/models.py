@@ -23,6 +23,8 @@ class Profile(models.Model):
 class Post(models.Model):
     id = models.UUIDField(primary_key = True, default = uuid.uuid4)
     user = models.CharField(max_length = 100)
+    user_profile = models.ForeignKey(Profile, on_delete = models.CASCADE, default=None, null=False)
+    post_location = models.CharField(max_length=100, blank=True)
     images = models.ManyToManyField('Image')
     caption = models.TextField()
     tag = models.CharField(max_length = 20, blank = True, null=True)
@@ -46,4 +48,12 @@ class LikePost(models.Model):
     def __str__(self):
         return self.username 
     
+class FollowersCount(models.Model):
+    follower = models.CharField(max_length = 100)
+    user = models.CharField(max_length = 100)
+
+    def __str__(self):
+        return self.user
+    
+
     

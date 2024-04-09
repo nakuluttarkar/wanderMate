@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
-from .models import Image, Profile, Post, LikePost
+from itertools import chain
+from .models import FollowersCount, Image, Profile, Post, LikePost
 from django.contrib.auth import authenticate, login
 import random
 import time 
@@ -37,13 +38,25 @@ def index(request):
 
     user_profile = Profile.objects.get(user = request.user)
 
+    user_following_list = []
+    feed = []
+
+    user_following = FollowersCount.objects.filter(follower = request.user.username)
+
+    for users in user_following:
+        user_following_list.append(users.user)
+
+    for usernames in user_following_list:
+        feed_lists = Post.objects.filter(user = usernames)
+        feed.append(feed_lists)
+
+    feed_list = list(chain(*feed))
+
+    
     posts = Post.objects.all()
-    for post in posts:
-        print(post.user)
-        print(post.caption)
-        print(post.images)
+    
     return render(request,'index.html', {'user_profile': user_profile,
-                                         'posts':posts})
+                                         'posts':feed_list})
 
 # settings page (Profile editing)
 @login_required(login_url='core:signinSignup')
@@ -182,6 +195,57 @@ def settings(request):
     return render(request,'settings.html',{'user_profile':user_profile})
 
 @login_required(login_url='core:signinSignup')
+def profile(request, pk):
+    user_object = User.objects.get(username = pk)
+    user_profile = Profile.objects.get(user = user_object)
+    user_posts = Post.objects.filter(user = pk)
+    user_post_length = len(user_posts)
+
+    follower = request.user.username
+    user = pk
+
+    if FollowersCount.objects.filter(follower = follower, user = user).first():
+        follow_button_text = 'Unfollow'
+
+    else:
+        follow_button_text = 'Follow'
+
+    user_followers = len(FollowersCount.objects.filter(user = pk))
+    user_following = len(FollowersCount.objects.filter(follower = pk))
+
+    context = {
+        'user_object': user_object,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length,
+        'follow_button_text': follow_button_text,
+        'user_followers': user_followers,
+        'user_following': user_following,
+    }
+
+    return render(request, 'profile.html', context)  
+
+@login_required(login_url='core:signinSignup')
+def create_post(request):
+    if request.method == 'POST':
+        user_profile = Profile.objects.get(user=request.user)
+        user = request.user.username
+        caption = request.POST['caption']
+        tag = request.POST['hashtag']
+        location = request.POST['location']
+        print(location)
+        post = Post.objects.create(user=user, caption=caption, tag=tag, user_profile = user_profile, post_location = location)
+
+        # Handle multiple image uploads
+        for image_file in request.FILES.getlist('image'):
+            image = Image.objects.create(image=image_file)
+            post.images.add(image)
+
+        return redirect('core:index')
+
+    return render(request, 'posts.html')
+
+@login_required(login_url='core:signinSignup')
 def like_post(request):
     username = request.user.username
     post_id = request.GET.get('post_id')
@@ -195,33 +259,30 @@ def like_post(request):
         new_like.save()
         post.no_of_likes += 1
         post.save()
-        return 
+        
     
     else:
         like_filter.delete()
         post.no_of_likes -= 1
         post.save()
-        return 
 
+    return redirect('core:index')  
 
-
-@login_required(login_url='core:signinSignup')
-def create_post(request):
+def follow(request):
     if request.method == 'POST':
-        user = request.user.username
-        caption = request.POST['caption']
-        tag = request.POST['hashtag']
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+        if FollowersCount.objects.filter(follower = follower, user = user).first() :
+             delete_follower = FollowersCount.objects.get(follower = follower, user = user)
+             delete_follower.delete()
+             
         
-        post = Post.objects.create(user=user, caption=caption, tag=tag)
+        else:
+            new_follower = FollowersCount.objects.create(follower = follower, user = user)
+            new_follower.save()
 
-        # Handle multiple image uploads
-        for image_file in request.FILES.getlist('image'):
-            image = Image.objects.create(image=image_file)
-            post.images.add(image)
-
-        return redirect('core:index')
-
-    return render(request, 'posts.html')
+        return redirect('/profile/' + user)
 
 
 

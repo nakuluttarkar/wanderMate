@@ -3,7 +3,7 @@
 
 {% block dp %}
 <div class="dp">
-    <a href="">
+    <a href="/profile/{{user.username}}">
         {% if user_profile.profile_img %}
         <img src="{{user_profile.profile_img.url}}" alt="">
         {% else %}
@@ -24,7 +24,11 @@
             <div class="left">
                 <a class="profile">
                 <div class="dp">
-                    <img src="dp2.jpg">
+                    {% if user_profile.profile_img %}
+                    <img src="{{user_profile.profile_img.url}}" alt="">
+                    {% else %}
+                    <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+                    {% endif %}
                 </div>
                 <div class="handle">
                     {% if user.is_authenticated %}
@@ -133,11 +137,15 @@
                         <div class="head">
                             <div class="user">
                                 <div class="dp">
-                                    <img src="dp2.jpg">
+                                    <a href = "{% url 'core:profile' post.user %}"><img src="{{ post.user_profile.profile_img.url }}"></a>
                                 </div>
                                 <div class="info">
                                     <h3>{{post.user}}</h3>
-                                    <small>Wayanad, 10 minutes ago</small>
+                                    {% if post.post_location %}
+                                    <small>{{post.post_location}}, {{post.created_at}}</small>
+                                    {% else %}
+                                    <small>{{post.created_at}}</small>
+                                    {% endif %}
                                 </div>
                             </div>
                             <span class="edit">
@@ -146,7 +154,7 @@
                         </div>
                         {% for image in post.images.all %}
                         <div class="photo" style="align-items:center">
-                            <img src="{{ image.image.url }}" style = "width: 300px; height: 300px">
+                            <img src="{{ image.image.url }}" >
                         </div> 
                         {% endfor %}
                         <div class="action-button">

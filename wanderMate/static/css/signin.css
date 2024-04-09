@@ -9,6 +9,7 @@
 
 body{
     background-color: #B4D4FF;
+    /* background-color: red; */
     background: linear-gradient(to right, #e2e2e2, 3c9d6ff);
     display: flex;
     align-items: center;
@@ -17,10 +18,7 @@ body{
     height: 100vh;
 }
 
-.image{
-    /* background-color: red; */
-    top:-10%;
-}
+
 
 .container{
     margin-top: -4%;
