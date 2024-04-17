@@ -223,7 +223,7 @@ def profile(request, pk):
         'user_following': user_following,
     }
 
-    return render(request, 'profile.html', context)  
+    return render(request, 'profileView.html', context)  
 
 @login_required(login_url='core:signinSignup')
 def create_post(request):

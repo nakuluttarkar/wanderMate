@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+    <div class="profile">
+        <div class="profile-info">
+            <img src="rishika.jpg" alt="Profile Picture">
+            <h1>User Name</h1>
+            <div class="follow-buttons">
+                <form action = "/follow" method="post"> 
+                    {% csrf_token %}
+                    <input type = "hidden" value = "{{user.username}}" name = "follower" />
+                    <input type = "hidden" value = "{{user_object.username}}" name = "user" />
+                    {% if user_object.username == user.username%}
+                    <a href = "/settings"><div style = "background-color:blue; width:60px; color:white; border-radius:3px">Edit Profile</div></a>
+                    {% else %}
+                    <div class="follow-btn">
+                        <button type="submit">{{follow_button_text}}</button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="follow-info">
+                <p><span>{{user_followers}}</span> Followers</p>
+                <p><span>{{user_following}}</span> Following</p>
+                <p><span>{{user_post_length}}</span> Posts</p>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="feeds">
+                <!--FEED !-->
+                {% for post in user_posts %}
+                <div class="feed">
+                    {% for image in post.images.all %}
+                    <div class="photo">
+                        <img src="{{image.image.url}}">
+                    </div>
+                    {% endfor %}
+                    <div class="action-button">
+                        <div class="interaction-buttons">
+                            <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span>
+                            <span><i class="uil-comment-dots"></i></i></span>
+                            <span><i class="uil-share-alt"></i></i></span>
+                        </div>
+                        <div class="bookmark">
+                            <span><i class="uil-bookmark"></i></span>
+                        </div>                         
+                    </div>
+
+                    <div class="liked-by">
+                        <span><img src="nish.png"></span>
+                        <span><img src="pramada.jpg"></span>
+                        <span><img src="nakul.png"></span>
+                        {% if post.no_of_likes == 0 %}
+                        <p>No likes</p>
+                        {% elif post.no_of_likes == 1 %}
+                        <p>Liked by 1 person</p>
+                        {% else %}
+                        <p>Liked by {{post.no_of_likes}} people </p>
+                        {% endif %}
+                    </div>
+                    <div class="caption">
+                        <p><b>Nishmitha M</b> {{post.caption}}<span class="hashtag">{{post.tag}}</span></p>
+                    </div>
+                    <div class="text-muted">
+                        View all 10 comments
+                    </div>
+                </div>
+                {% endfor %}
+                <!--end of feed1-->
+            </div>
+        </div>
+    </div> 
+{% endblock %}
