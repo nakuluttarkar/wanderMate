@@ -4,10 +4,11 @@
 {% block content %}
 
 <div class="create-post-form-container">
+    <h2>New Post</h2>
 
     <form class = "create-post-form" action="#" method="post" enctype="multipart/form-data">
         
-        <label class = "create-post-label" for="image">Upload Image(s):</label>
+        <label class = "create-post-label" for="image">Upload Images:</label>
         <input type="file" id="image" name="image" accept="image/*" multiple onchange="previewImages(event)">
         <div class="image-preview" id="imagePreview"></div>
         
@@ -19,11 +20,12 @@
         
         <label class = "create-post-label" for="category">Category:</label>
         <select class="create-post-select" id="category" name="category">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+            <option value="option1">Beaches</option>
+            <option value="option2">Mountains</option>
+            <option value="option3">Snow</option>
+            <option value="option4">City</option>
         </select>
-        <button type="submit">Post</button>
+        <button type="submit" class="post-btn">Post</button>
     </form>
 
 
