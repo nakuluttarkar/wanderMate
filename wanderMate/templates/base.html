@@ -14,7 +14,27 @@
 <body>
 
     <!-- Navbar -->
-    {% include 'navbar.html' %}
+    <nav>
+        <div class="container">
+            <a href="{% url 'core:index' %}" style="color:black"><h2 class="logo">
+                WanderMate
+            </h2></a>
+            <form action = "/search" method = "post" >
+                {% csrf_token %}
+                <div class="search-container" style="display: flex; align-items: center;">
+                    <input type="text" name="search_username" class="search-input" placeholder="Search...here"  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;">
+                    <button type="submit" class="search-button" style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 40px; background-color: #f0f0f0; cursor: pointer;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
+                </div>
+            </form>           
+            <div class="create">
+                <label class="btn btn-primary" for="create-post"><a href="{% url 'core:logout' %}" style="text-decoration: none; color:aliceblue ">logout</a></label>
+                {% block dp %}
+    
+                {% endblock %}
+    
+            </div>
+        </div>
+    </nav>
     <!-- end of Navbar -->
     {% block content %}
 
