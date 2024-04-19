@@ -243,7 +243,7 @@ def create_post(request):
 
         return redirect('core:index')
 
-    return render(request, 'posts.html')
+    return render(request, 'create_post.html')
 
 @login_required(login_url='core:signinSignup')
 def like_post(request):
