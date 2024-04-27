@@ -42,8 +42,8 @@
                     <a class="menu-item active">
                         <span><i class="uil uil-home"></i></span><h3>Home</h3>
                     </a>
-                    <a class="menu-item">
-                        <span><i class="uil uil-compass"></i></span><h3>Explore</h3>
+                    <a class="menu-item" href = "/chat">
+                        <span><i class="uil uil-compass"></i></span><h3>Messages</h3>
                     </a>
                     <a class="menu-item" id="notifications">
                         <span><i class="uil uil-bell"><small class="notification-count">3+</small></i></span><h3>Notification</h3>
@@ -94,32 +94,7 @@
            <!--*****************************MIDDLE********************************-->
             <div class="middle">
                 <!--------Story---------->
-                <div class="stories">
-                    <div class="story">
-                        <div class="dp">
-                            <img src="dp2.jpg" alt="">
-                        </div>
-                        <p class="name">Your Story</p>
-                    </div>
-                    <div class="story">
-                        <div class="dp">
-                            <img src="dp3.jpeg" alt="">
-                        </div>
-                        <p class="name">Nishmitha</p>
-                    </div>
-                    <div class="story">
-                        <div class="dp">
-                            <img src="dp4.png" alt="">
-                        </div>
-                        <p class="name">Pramada</p>
-                    </div>
-                    <div class="story">
-                        <div class="dp">
-                            <img src="dp5.jpeg" alt="">
-                        </div>
-                        <p class="name">Nakul</p>
-                    </div>
-                </div>
+                
                 <!----END OF STORY------->
                 <form class="create-post">
                     <div class="dp">
@@ -198,6 +173,11 @@
             <!-------End of feed------------->
             <!-----------------------RIGHT-------------->
             <div class="right">
+                <form action = "/search_groups" method = "post">
+                    {% csrf_token %}
+                    <input type="text" name="group_name" class="search-input" placeholder="Search for groups..."  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;"> 
+                    <button type="submit" class="search-button" style="margin-right:120px;border: 1px solid #ccc; border-radius: 40px; background-color: grey; cursor: pointer;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
+                </form>
                 <div class="messages" id="messages">
                     <div class="heading">
                         <h4>Groups</h4><i class="uil-edit"></i>
@@ -227,13 +207,13 @@
                         <div class="dp">
                             <img src="pramada.jpg">
                         </div>
-                        <div class="meaasage-body">
+                        <div class="message-body">
                             <h5> Weekend Trek</h5>
                             <p class="text-muted">Okkkk</p>
                         </div>
                     </div>
                 </div>
-                <label for="create-post" class="btn btn-primary">Create Group</label>
+                <label for="create-post" class="btn btn-primary"><a href = "{% url 'core:create_group' %}" style = "color:white">Create aGroup</a></label>
             </div>
     </main>
 

@@ -10,27 +10,27 @@
 
         <div class="container">
 
-            {% if username_profile_list %}
+            {% if group_list %}
             
             <h2>Search Results</h2>
+            
+            {% for group in group_list %}
 
-            {% for user in username_profile_list %}
-
-            <a href="/profile/{{user.user.username}}">
+            <a href="/group_detail/{{group.id}}">
                 <div class="user-card">
                     <div class="profile-image">
-                        {% if user.profile_img.url %}
-                        <img src="{{user.profile_img.url}}" alt="static 'image/defaultProfileImg.jpeg'" >
+                        {% if group.profile_img.url %}
+                        <img src="{{group.profile_img.url}}" alt="static 'image/defaultProfileImg.jpeg'" >
                         {% else %}
                         <img src = "static 'image/defaultProfileImg.jpeg'">
                         {% endif %}
                     </div>
                     <div class="user-details">
-                        <h3>{{user.user.username}}</h3>
-                        <p>{{user.fname}} {{user.lname}}</p>
+                        <h3>{{group.name}}</h3>
                         <p></p>
-                        <p>{{user.bio}}</p>
-                        <p>{{user.location}}</p>
+                        <p></p>
+                        <p>Created by: {{group.creator}}</p>
+                        <p>{{group.travel_location}}</p>
                     </div>
                 </div>
             </a>

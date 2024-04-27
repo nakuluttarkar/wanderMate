@@ -55,5 +55,22 @@ class FollowersCount(models.Model):
     def __str__(self):
         return self.user
     
+class TravelGroup(models.Model):
+    name = models.CharField(max_length=100)
+    group_image = models.ImageField(upload_to='group_images', blank = True)
+    travel_location = models.CharField(max_length = 100, blank=True)
+    description = models.TextField()
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_groups')
+    participants = models.ManyToManyField(User, related_name='joined_groups')
+    members = models.ManyToManyField(User, through='Membership')
+
+    def __str__(self):
+        return self.name
+
+class Membership(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    travel_group = models.ForeignKey(TravelGroup, on_delete=models.CASCADE)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    
 
     

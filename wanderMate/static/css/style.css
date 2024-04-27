@@ -542,6 +542,8 @@ main .container .left .profile{
   }
 
  .right .messages{
+    margin-top: 1rem;
+
     background: var(--color-white);
     border-radius: var(--card-border-radius);
     padding: var(--card-padding);

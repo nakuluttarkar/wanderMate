@@ -4,8 +4,8 @@
 {% block content%}
     <div class="profile">
         <div class="profile-info">
-            <img src="rishika.jpg" alt="Profile Picture">
-            <h1>User Name</h1>
+            <img src="{{user_profile.profile_img.url}}" alt="Profile Picture">
+            <h1>{{user_profile.fname}} {{user_profile.lname}}</h1>
             <div class="follow-buttons">
                 <form action = "/follow" method="post"> 
                     {% csrf_token %}
@@ -21,7 +21,7 @@
                 </form>
             </div>
             <div class="follow-info">
-                <p><span>{{user_followers}}</span> Followers</p>
+                <p><a href = "/follower_list?user_name={{user_object.username}}"><span>{{user_followers}}</span> Followers</p><a>
                 <p><span>{{user_following}}</span> Following</p>
                 <p><span>{{user_post_length}}</span> Posts</p>
             </div>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ group.name }}</title>
+</head>
+<body>
+    <h1>{{ group.name }}</h1>
+    <p>{{ group.description }}</p>
+
+    <h1> group participants </h1>
+    {% for participant in group.participants.all%}
+    <p>{{participant.username}}</p>
+    {% endfor %}
+
+    
+    
+  {% if user == group.creator %}
+  <h2>Add Participants</h2>
+  <form method="post" action="{% url 'core:search_users_for_group' group_id=group.id %}">
+    {% csrf_token %}
+      <input type="text" name="query" placeholder="Search users...">
+      <button type="submit">Search</button>
+  </form>
+
+  {% if username_profile_list %}
+  <h1> users </h1>
+  <ul>
+      {% for user in username_profile_list %}
+      <li>
+          <img src="{{ user.profile_img.url }}" alt="User Profile Image">
+          {{ user.user.username }}
+          {% if user.user in group.participants.all %}
+              <form method="post" action="{% url 'core:remove_participant' group_id=group.id user_id=user.id_user %}">
+                  {% csrf_token %}
+                  <button type="submit">Remove Participant</button>
+              </form>
+          {% else %}
+              <form method="post" action="{% url 'core:add_participant' group_id=group.id user_id=user.id_user %}">
+                  {% csrf_token %}
+                  <button type="submit">Add Participant</button>
+              </form>
+          {% endif %}
+      </li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+  {% else %}
+    {% if user in group.participants.all %}
+    <form method="post" action="{% url 'core:leave_group' group_id=group.id %}">
+        {% csrf_token %}
+        <button type="submit">Leave group</button>
+    </form>
+    {% else %}
+    <form method="post" action="{% url 'core:join_group' group_id=group.id %}">
+        {% csrf_token %}
+        <button type="submit">Join group</button>
+    </form>
+
+    {% endif %}
+  
+  {% endif %}
+
+</body>
+</html>

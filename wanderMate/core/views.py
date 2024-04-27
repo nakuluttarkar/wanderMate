@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
 from itertools import chain
-from .models import FollowersCount, Image, Profile, Post, LikePost
+from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup
 from django.contrib.auth import authenticate, login
 import random
 import time 
@@ -91,6 +91,48 @@ def verify_otp(request):
             messages.error(request, 'Invalid OTP. Please try again.')
 
     return render(request, 'verify_otp.html')
+
+
+def searchForuser(username):
+    username_profile = []
+    username_profile_list = []
+    if username == '':
+        
+        return username_profile_list
+    username_object = User.objects.filter(username__icontains = username)
+
+    
+
+    for users in username_object :
+        username_profile.append(users.id)
+
+    for ids in username_profile:
+        profile_lists = Profile.objects.filter(id_user = ids)
+        username_profile_list.append(profile_lists)
+
+    username_profile_list = list(chain(*username_profile_list))
+    return username_profile_list
+
+def searchForGroup(group_name):
+    groupname_list = []
+    group_list = []
+    if group_name == '':
+        return groupname_list
+    
+    group_object = TravelGroup.objects.filter(name__icontains = group_name)
+    print(group_object)
+
+    for group in group_object:
+        groupname_list.append(group.id)
+
+    for ids in groupname_list:
+        group_list_temp = TravelGroup.objects.filter(id = ids)
+        group_list.append(group_list_temp)
+
+    print("group list = ", group_list)
+
+    group_list = list(chain(*group_list))
+    return group_list
 
 #for sigin and signup page 
 def signin_signup(request):
@@ -245,6 +287,24 @@ def create_post(request):
 
     return render(request, 'create_post.html')
 
+def create_group(request):
+    if request.method == 'POST' :
+        group_name = request.POST['group_name']
+        location = request.POST['location']
+        description = request.POST['description']
+        image = request.FILES.get('group_image')
+
+        group = TravelGroup.objects.create(name=group_name, 
+                                           description=description, 
+                                           creator=request.user, group_image = 
+                                           image, 
+                                           travel_location = location)
+        print(group)
+        return redirect('core:group_detail', group_id=group.id)
+    else:
+
+        return render(request, 'create_group.html')
+
 @login_required(login_url='core:signinSignup')
 def like_post(request):
     username = request.user.username
@@ -290,28 +350,95 @@ def search(request):
     print(request.POST)
 
     if request.method == 'POST' :
+        
         search_username = request.POST['search_username']
-        username_object = User.objects.filter(username__icontains = search_username)
-
-        username_profile = []
-        username_profile_list = []
-
-        for users in username_object :
-            username_profile.append(users.id)
-
-        for ids in username_profile:
-            profile_lists = Profile.objects.filter(id_user = ids)
-            username_profile_list.append(profile_lists)
-
-        username_profile_list = list(chain(*username_profile_list))
+        username_profile_list = searchForuser(search_username)
+        
         print(username_profile_list)
+        
     return render(request, 'search.html', {'username_profile_list' : username_profile_list}) 
 
+def search_groups(request):
+    if request.method == 'POST':
+        search_group = request.POST['group_name']
+        group_list = searchForGroup(search_group)
+
+    return render(request, 'search_group.html', {'group_list':group_list})
+
+@login_required(login_url='core:signinSignup')
+def search_users_for_group(request, group_id):
+    user = request.user
+    group = TravelGroup.objects.get(id=group_id)
+    is_participant = request.user in group.participants.all()
+    
+
+    print("hello world" , request.POST)
+    if request.method == 'POST' :
+        search_username = request.POST['query']
+        username_profile_list = searchForuser(search_username)
+        print("hello" , username_profile_list)
+
+    context = {'group': group, 'user':user, 'is_participant': is_participant, 'username_profile_list' : username_profile_list}
+    return render(request, 'group_detail.html', context)
+
+@login_required(login_url='core:signinSignup')
+def add_participant(request, group_id, user_id):
+    group = TravelGroup.objects.get(id=group_id)
+    user = User.objects.get(id=user_id)
+    group.participants.add(user)
+    return redirect('core:group_detail', group_id=group_id)
+
+@login_required(login_url='core:signinSignup')
+def remove_participant(request, group_id, user_id):
+    group = TravelGroup.objects.get(id=group_id)
+    user = User.objects.get(id=user_id)
+    group.participants.remove(user)
+    return redirect('core:group_detail', group_id=group_id)
+
+@login_required(login_url='core:signinSignup')
+def group_detail(request, group_id):
+    user = request.user
+    group = TravelGroup.objects.get(id=group_id)
+    is_participant = request.user in group.participants.all()
+    context = {'group': group, 'user':user, 'is_participant': is_participant}
+    return render(request, 'group_detail.html', context)
+
+@login_required(login_url='core:signinSignup')
+def join_group(request, group_id):
+    group = TravelGroup.objects.get(id=group_id)
+    group.participants.add(request.user)
+    return redirect('core:group_detail', group_id=group_id)
+
+def leave_group(request, group_id):
+    group = TravelGroup.objects.get(id=group_id)
+    group.participants.remove(request.user)
+    return redirect('core:group_detail', group_id=group_id)
+
+@login_required(login_url='core:signinSignup')
+def follower_list(request):
+    # user = request.user 
+    # print(user)
+    user_name =  request.GET.get('user_name')
+    followers = FollowersCount.objects.filter(user = user_name)
+    
+    return render(request, 'follower_list.html', {'followers':followers})
+
+@login_required(login_url='core:signinSignup')
+def chat(request):
+    user_name = request.user
+    followers_list = FollowersCount.objects.filter(user = user_name)
+    print(followers_list)
+    return render(request, 'chat.html', {'followers_list':followers_list})
+
+# def chat_room(request):
+#     user_chat = request.GET.get('user_name')
+    
 
 @login_required(login_url='core:signinSignup')
 def logout(request):
     auth.logout(request)
     return redirect('core:signinSignup')
+
 
 
 

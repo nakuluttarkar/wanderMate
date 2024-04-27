@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #075e54;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .chat-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px;
+        }
+        .chat-item {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-info {
+            flex: 1;
+        }
+        .sender {
+            font-weight: bold;
+            color: #075e54;
+        }
+        .last-message {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Chats</h1>
+    </div>
+    <ul class="chat-list">
+
+        {% for follower in followers_list %}
+        <li class="chat-item" href = "#">
+            <a href = "/chat-room?user_name={{follower.follower}}">
+            <img src="profile1.jpg" alt="Profile Image" class="profile-img">
+            <div class="chat-info">
+                <div class="sender">{{follower.follower}}</div>
+                <div class="last-message">Hi there!</div>
+            </div>
+            </a>
+        </li>
+        {% endfor %}
+        <li class="chat-item" onclick="location.href='#';">
+            <a href = "#">
+            <img src="profile2.jpg" alt="Profile Image" class="profile-img">
+            <div class="chat-info">
+                <div class="sender">Jane Smith</div>
+                <div class="last-message">Hey, how are you?</div>
+            </div>
+        </li>
+        <li class="chat-item" onclick="location.href='#';">
+            <a href = "#">
+            <img src="profile3.jpg" alt="Profile Image" class="profile-img">
+            <div class="chat-info">
+                <div class="sender">Mike Johnson</div>
+                <div class="last-message">I'm good, thanks!</div>
+            </div>
+        </li>
+        <!-- Add more chat items as needed -->
+    </ul>
+</body>
+</html>
