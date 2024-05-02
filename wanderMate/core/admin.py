@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FollowersCount, TravelGroup, Image, LikePost, Membership, Post, Profile
+from .models import FollowersCount, TravelGroup, Image, LikePost, Membership, Post, Profile, Comment
 # Register your models here.
 admin.site.register(Profile)
 admin.site.register(Post)
@@ -8,3 +8,4 @@ admin.site.register(LikePost)
 admin.site.register(FollowersCount)
 admin.site.register(TravelGroup)
 admin.site.register(Membership)
+admin.site.register(Comment)

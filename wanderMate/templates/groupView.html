@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<body>
+    
+    <div class="group-profile">
+        <div class="group-info">
+            <img src="taj.jpg" alt="Group Photo">
+            <h1>{{ group.name }}</h1>
+            <p>{{ group.description }}</p>
+
+            {% if user in group.participants.all %}
+            <form method="post" action="{% url 'core:leave_group' group_id=group.id %}">
+                {% csrf_token %}
+                <button type = "submit" class="chat-button">Leave Group</button>
+            </form>
+            {% else %}
+            <form method="post" action="{% url 'core:join_group' group_id=group.id %}">
+                {% csrf_token %}
+                <button type = "submit" class="chat-button">Join Group</button>
+            </form>
+
+            {% endif %}
+            
+        </div>
+
+        <div class="members">
+            <h2>Members</h2>
+            <ul class="member-list">
+                {% for participant in participant_profiles %}
+                <a href = "{% url 'core:profile' participant.user.username %}"><li><img src="{{ participant.profile_img.url }}" alt="User Profile Image">{{participant.user.username}}</li><a>
+                {% endfor %}
+                {% comment %} <li><img src="dp3.jpeg" alt="User 2">Maya</li>
+                <li><img src="dp5.jpeg" alt="User 3">Kaushik</li> {% endcomment %}
+                <!-- Add more members here -->
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.template import RequestContext
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
@@ -7,7 +8,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
 from itertools import chain
-from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup
+from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment
 from django.contrib.auth import authenticate, login
 import random
 import time 
@@ -51,12 +52,15 @@ def index(request):
         feed.append(feed_lists)
 
     feed_list = list(chain(*feed))
-
+    
+    user = request.user
+    user_groups = TravelGroup.objects.filter(participants=user)
     
     posts = Post.objects.all()
     
     return render(request,'index.html', {'user_profile': user_profile,
-                                         'posts':feed_list})
+                                         'posts':feed_list,
+                                         'user_groups': user_groups})
 
 # settings page (Profile editing)
 @login_required(login_url='core:signinSignup')
@@ -319,14 +323,39 @@ def like_post(request):
         new_like.save()
         post.no_of_likes += 1
         post.save()
-        
+        # return JsonResponse({'success': True, 'likes': post.no_of_likes})
     
     else:
         like_filter.delete()
         post.no_of_likes -= 1
         post.save()
+        # return JsonResponse({'success': True, 'likes': post.no_of_likes})
+    
+    
 
-    return redirect('core:index')  
+    return redirect('core:index')
+                                           
+
+@login_required(login_url='core:signinSignup')
+def add_comment(request):
+    if request.method == 'POST':
+        post_id = request.GET.get('post_id')
+        post = Post.objects.get(id = post_id)
+        comment = request.POST['comment']
+        user = request.user
+        comment = Comment.objects.create(post=post, user=user, text=comment)
+
+        comments = Comment.objects.filter(post = post)
+        print("post_id = ", post_id)
+        print("comment = ", comment)
+    return render(request, "comments.html", {'post':post, 'comments':comments})
+
+def view_comments(request):
+        post_id = request.GET.get('post_id')
+        post = Post.objects.get(id = post_id)
+        comments = Comment.objects.filter(post = post)
+        return render(request, "comments.html", {'post':post, 'comments':comments})
+
 
 def follow(request):
     if request.method == 'POST':
@@ -351,19 +380,22 @@ def search(request):
 
     if request.method == 'POST' :
         
-        search_username = request.POST['search_username']
-        username_profile_list = searchForuser(search_username)
+        search_query = request.POST['search']
+        
+        username_profile_list = searchForuser(search_query)
+        group_list = searchForGroup(search_query)
+
         
         print(username_profile_list)
         
-    return render(request, 'search.html', {'username_profile_list' : username_profile_list}) 
+    return render(request, 'searchView.html', {'username_profile_list' : username_profile_list, 'group_list':group_list}) 
 
-def search_groups(request):
-    if request.method == 'POST':
-        search_group = request.POST['group_name']
-        group_list = searchForGroup(search_group)
+# def search_groups(request):
+#     if request.method == 'POST':
+#         search_group = request.POST['group_name']
+        
 
-    return render(request, 'search_group.html', {'group_list':group_list})
+#     return render(request, 'search_group.html', {'group_list':group_list})
 
 @login_required(login_url='core:signinSignup')
 def search_users_for_group(request, group_id):
@@ -400,8 +432,11 @@ def group_detail(request, group_id):
     user = request.user
     group = TravelGroup.objects.get(id=group_id)
     is_participant = request.user in group.participants.all()
-    context = {'group': group, 'user':user, 'is_participant': is_participant}
-    return render(request, 'group_detail.html', context)
+    participants = group.participants.all()
+    participant_profiles = Profile.objects.filter(user__in=participants)
+    print(participant_profiles)
+    context = {'group': group, 'user':user, 'is_participant': is_participant,'participant_profiles': participant_profiles}
+    return render(request, 'groupView.html', context)
 
 @login_required(login_url='core:signinSignup')
 def join_group(request, group_id):

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body>
+    <h1>Comments for Post: {{ post.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <textarea name="comment" cols="30" rows="10"></textarea>
+        <button type="submit">Add Comment</button>
+    </form>
+    
+    <h2>Existing Comments:</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.user.username }}: {{ comment.text }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'css/searchView.css' %}">
+</head>
+<body>
+    <div class="search-results">
+        {% if username_profile_list %}
+        <div class="users">
+            <h2>Users list</h2>
+            {% for user in username_profile_list %}
+            <a href="/profile/{{user.user.username}}">
+            <div class="user-card">
+                <div class="profile-image">
+                        {% if user.profile_img.url %}
+                        <img src="{{user.profile_img.url}}" >
+                        <h1>hello</h1>
+                        {% else %}
+                        <img src = "{% static 'image/defaultProfileImg.jpeg' %}">
+                        {% endif %}
+                </div>
+                <div class="user-details">
+                    <h3>{{user.fname}} {{user.lname}}</h3>
+                    <p>{{user.user.username}}<p>
+                    <p>{{user.location}}</p>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+            <!-- Add more user cards as needed -->
+        </div>
+        {% endif %}
+        {% if group_list %}
+        <div class="groups">
+            
+            <h2>Groups</h2>
+            {% for group in group_list %}
+            <a href="/group_detail/{{group.id}}">
+            <div class="group-card">
+                <div class="group-image">
+                        {% if group.profile_img.url %}
+                        <img src="{{group.profile_img.url}}" alt="static 'image/defaultProfileImg.jpeg'" >
+                        {% else %}
+                        <img src = "static 'image/defaultProfileImg.jpeg'">
+                        {% endif %}
+                </div>
+                <div class="group-details">
+                    <h3>{{group.name}}</h3>
+                    <p>Created by: {{group.creator}}</p>
+                    <p>{{group.travel_location}}</p>
+                </div>
+            </div>
+        </a>
+            {% endfor %}
+            
+           
+            <!-- Add more group cards as needed -->
+        </div>
+        {% else %}
+            <h2> No Groups Found </h2>
+        {% endif %}
+    </div>
+</body>
+</html>

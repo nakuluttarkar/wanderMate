@@ -96,13 +96,7 @@
                 <!--------Story---------->
                 
                 <!----END OF STORY------->
-                <form class="create-post">
-                    <div class="dp">
-                        <img src="dp2.jpg">
-                    </div>
-                    <input type="text" placeholder="What's on your mind, Rishika" id="create-post">
-                    <input type="submit" value="Post" class="btn btn-primary">
-                </form>
+                
                 <!-------FEEDS--------->
                 <div class="feeds">
                     <!--FEED !-->
@@ -135,7 +129,7 @@
                         <div class="action-button">
                             <div class="interaction-buttons">
                                 <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span>
-                                <span><i class="uil-comment-dots"></i></i></span>
+                                <span><a onclick="openCommentsPopup('{{post.id}}')"><i class="uil-comment-dots"></i></i></a></span>
                                 <span><i class="uil-share-alt"></i></i></span>
                             </div>
                             <div class="bookmark">
@@ -143,10 +137,8 @@
                             </div>                         
                         </div>
 
-                        <div class="liked-by">
-                            <span><img src="dp3.jpeg"></span>
-                            <span><img src="dp4.png"></span>
-                            <span><img src="dp5.jpeg"></span>
+                        <div class="liked-by" id="like-count-{{ post.id }}">
+            
                             {% if post.no_of_likes == 0 %}
                             <p>No likes</p>
                             {% elif post.no_of_likes == 1 %}
@@ -159,8 +151,38 @@
                         <div class="caption">
                             <p><b>{{post.user}}</b> {{post.caption}} <span class="hashtag">#{{post.tag}}</span></p>
                         </div>
+                        
+                        <form method = 'post' action = "/add_comment?post_id={{post.id}}">
+                            {% csrf_token %}
+                            <input type = "text" name = "comment" placeholder = "Add comment..." style="border-radius:20px;margin-top:3px; width:75%" >
+                            <button type = "submit" style="border-radius:20px; background-color:#176B87">Submit Comment</button>
+                        </form>
+                        
                         <div class="text-muted">
-                            View all 10 comments
+                            <a href = "/view_comments?post_id={{post.id}}"> View all 10 comments </a>
+                        </div>
+                        
+                        <div id="popup-box" class="modal">
+                            <div class="popup-content">
+                                <h1 style=" margin-right:10px">
+                                    Comments    
+                                </h1>
+                                <p>Comment 1</p>
+                                <p>Comment 2</p>
+                                <p>Comment 3</p>
+                                <a
+                                    href="#"
+                                    style="
+                                        position: absolute;
+                                        top: 10px;
+                                        right: 10px;
+                                        color: #fe0606;
+                                        font-size: 30px;
+                                        text-decoration: none;
+                                    "
+                                    >&times;</a
+                                >
+                            </div>
                         </div>
                     </div>
 
@@ -173,48 +195,62 @@
             <!-------End of feed------------->
             <!-----------------------RIGHT-------------->
             <div class="right">
-                <form action = "/search_groups" method = "post">
-                    {% csrf_token %}
-                    <input type="text" name="group_name" class="search-input" placeholder="Search for groups..."  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;"> 
-                    <button type="submit" class="search-button" style="margin-right:120px;border: 1px solid #ccc; border-radius: 40px; background-color: grey; cursor: pointer;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
-                </form>
-                <div class="messages" id="messages">
-                    <div class="heading">
-                        <h4>Groups</h4><i class="uil-edit"></i>
-                    </div>
-                    <!----------Message 1---------->
-                    <div class="message">
-                        <div class="dp">
-                            <img src="nakul.png">
+                
+                
+                <div class="requests">
+                    {% if user_groups %}
+                    <h4>Groups</h4>
+                    <!------request 1 --------->
+                    {% for user_group in user_groups %}
+                    <div class="request">
+                        <div class="info">
+                            <div class="dp">
+                                <img src="dp4.png">
+                            </div>
+                            <div>
+                                <h5>{{user_group.name}}</h5>
+                                <p class="text-muted">
+                                    3 mutual friends
+                                </p>
+                            </div>
                         </div>
-                        <div class="meaasage-body">
-                            <h5>Beach people</h5>
-                            <p class="text-muted">Hai</p>
-                        </div>
-                    </div>
-                    <!-- message 2-- -->
-                    <div class="message">
-                        <div class="dp">
-                            <img src="nish.png">
-                        </div>
-                        <div class="meaasage-body">
-                            <h5>Pondicherry group</h5>
-                            <p class="text-bold">2 new messages</p>
-                        </div>
-                    </div>
-                    <!---message 3---->
-                    <div class="message">
-                        <div class="dp">
-                            <img src="pramada.jpg">
-                        </div>
-                        <div class="message-body">
-                            <h5> Weekend Trek</h5>
-                            <p class="text-muted">Okkkk</p>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
                         </div>
                     </div>
+                    {% endfor %}
+                    <!-----request 2-------->
+                    {% comment %} <div class="request">
+                        <div class="info">
+                            <div class="dp">
+                                <img src="dp5.jpeg">
+                            </div>
+                            <div>
+                                <h5>riderboy</h5>
+                                <p class="text-muted">
+                                    0 mutual friends
+                                </p>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                            <button class="btn">
+                                Decline
+                            </button>
+                        </div>
+                    </div> {% endcomment %}
+                    {% endif %}
                 </div>
                 <label for="create-post" class="btn btn-primary"><a href = "{% url 'core:create_group' %}" style = "color:white">Create aGroup</a></label>
             </div>
     </main>
+    
 
     {% endblock %}

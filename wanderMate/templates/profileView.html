@@ -6,6 +6,7 @@
         <div class="profile-info">
             <img src="{{user_profile.profile_img.url}}" alt="Profile Picture">
             <h1>{{user_profile.fname}} {{user_profile.lname}}</h1>
+            <p>{{user_profile.user.username}}</p>
             <div class="follow-buttons">
                 <form action = "/follow" method="post"> 
                     {% csrf_token %}
@@ -23,7 +24,7 @@
             <div class="follow-info">
                 <p><a href = "/follower_list?user_name={{user_object.username}}"><span>{{user_followers}}</span> Followers</p><a>
                 <p><span>{{user_following}}</span> Following</p>
-                <p><span>{{user_post_length}}</span> Posts</p>
+                <p style="align-items:center"><span>{{user_post_length}}</span> Posts</p>
             </div>
         </div>
         <div class="middle">

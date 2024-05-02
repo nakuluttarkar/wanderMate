@@ -22,7 +22,7 @@
             <form action = "/search" method = "post" >
                 {% csrf_token %}
                 <div class="search-container" style="display: flex; align-items: center;">
-                    <input type="text" name="search_username" class="search-input" placeholder="Search..."  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;">
+                    <input type="text" name="search" class="search-input" placeholder="Search..."  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;">
                     <button type="submit" class="search-button" style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 40px; background-color: #f0f0f0; cursor: pointer;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
                 </div>
             </form>           
@@ -40,32 +40,8 @@
 
     {% endblock %}
 
-    <script>
-        function buttonClick(button) {
-            button.style.backgroundColor = '#666'; // Change background color on click
-            setTimeout(function() {
-                button.style.backgroundColor = '#f0f0f0'; // Restore original background color after 1 second
-            }, 100);
-        }
-        function toggleDropdown() {
-            var dropdown = document.getElementById("myDropdown");
-            dropdown.classList.toggle("show");
-        }
     
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function(event) {
-            if (!event.target.matches('.search-button')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                var i;
-                for (i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        }
-        </script>
+               
 <script src="{% static 'js/index.js' %}"></script>
 </body>
 

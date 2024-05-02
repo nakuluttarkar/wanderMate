@@ -45,12 +45,37 @@ const searchMessage = () => {
     })
 }
 
-messageSearch.addEventListener('keyup', searchMessage);
+// messageSearch.addEventListener('keyup', searchMessage);
 
-messagesNotification.addEventListener('click',() => {
-    messages.style.boxShadow = '0 0 1rem var(--color-primary)';
-    messagesNotification.querySelector('.notification-count').style.display = 'none';
-    setTimeout(() => {
-        messages.style.boxShadow = 'none';
-    }, 2000);
-})
+// messagesNotification.addEventListener('click',() => {
+//     messages.style.boxShadow = '0 0 1rem var(--color-primary)';
+//     messagesNotification.querySelector('.notification-count').style.display = 'none';
+//     setTimeout(() => {
+//         messages.style.boxShadow = 'none';
+//     }, 2000);
+// })
+
+console.log("hello")
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle like button click
+    document.querySelectorAll('.like-button').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+    
+            // Get the post ID from the button's data attribute
+            var postId = button.dataset.postId;
+            console.log('Post ID:', postId); // Debugging output
+    
+            // Send an AJAX request to like the post
+            fetch(`/like-post/?post_id=${postId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data); // Debugging output
+                    // Update the UI based on the response
+                })
+                .catch(error => console.error('Error:', error)); // Handle errors
+        });
+    });
+});
+console.log("hello1")
