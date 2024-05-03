@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
 from itertools import chain
-from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment
+from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment, Room, Message
 from django.contrib.auth import authenticate, login
 import random
 import time 
@@ -56,7 +58,15 @@ def index(request):
     user = request.user
     user_groups = TravelGroup.objects.filter(participants=user)
     
-    posts = Post.objects.all()
+    
+    #user recommendation starts
+
+    all_users = User.objects.all()
+    user_following_all = []
+
+    for user in user_following:
+        user_list = User.objects.get(username = user.user)
+        user_following_all.append(user_list)
     
     return render(request,'index.html', {'user_profile': user_profile,
                                          'posts':feed_list,
@@ -311,29 +321,27 @@ def create_group(request):
 
 @login_required(login_url='core:signinSignup')
 def like_post(request):
-    username = request.user.username
-    post_id = request.GET.get('post_id')
+    if request.method == 'GET' and request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        username = request.user.username
+        post_id = request.GET.get('post_id')
 
-    post = Post.objects.get(id = post_id)
+        post = get_object_or_404(Post, id=post_id)
 
-    like_filter = LikePost.objects.filter(post_id = post_id, username = username).first()
+        like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+        print(like_filter, post, post_id, username)
+        if like_filter is None:
+            new_like = LikePost.objects.create(post_id=post_id, username=username)
+            post.no_of_likes += 1
+            post.save()
+            return JsonResponse({'success': True, 'likes': post.no_of_likes})
+        else:
+            like_filter.delete()
+            print("hello")
+            post.no_of_likes -= 1
+            post.save()
+            return JsonResponse({'success': True, 'likes': post.no_of_likes})
 
-    if like_filter == None : 
-        new_like = LikePost.objects.create(post_id = post_id, username = username)
-        new_like.save()
-        post.no_of_likes += 1
-        post.save()
-        # return JsonResponse({'success': True, 'likes': post.no_of_likes})
-    
-    else:
-        like_filter.delete()
-        post.no_of_likes -= 1
-        post.save()
-        # return JsonResponse({'success': True, 'likes': post.no_of_likes})
-    
-    
-
-    return redirect('core:index')
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
                                            
 
 @login_required(login_url='core:signinSignup')
@@ -468,6 +476,50 @@ def chat(request):
 # def chat_room(request):
 #     user_chat = request.GET.get('user_name')
     
+@login_required(login_url='core:signinSignup')
+def check_room(request, group_id, username):
+
+    group_obj = TravelGroup.objects.get(id = group_id)
+    print(group_obj)
+    group_name = group_obj.name
+    print(group_name)
+    try:
+        room = Room.objects.get(name=group_name)
+        print("Room already exists:", room)
+        return redirect('/' + group_name + '/?username=' + username)
+    except Room.DoesNotExist:
+        new_room = Room.objects.create(name=group_name)
+        new_room.save()
+        print("Created new room:", new_room)
+        return redirect('/' + group_name + '/?username=' + username)    
+    
+def chat_room(request, room):
+    username = request.GET.get('username')
+    print(room)
+    try:
+        room_details = Room.objects.get(name=room)
+
+        return render(request, "chat_room.html", {'username':username, 'room_details':room_details, 'room':room})
+    except Room.DoesNotExist:
+        return HttpResponse("No room")
+
+def send(request):
+    message = request.POST['message']
+    username = request.POST['username']
+    room_id = request.POST['room_id']
+    current_time = timezone.now()
+    print("hello")
+    new_message = Message.objects.create(value = message, user = username, room = room_id,date = current_time)
+    new_message.save()
+    print("hello before http response")
+    return HttpResponse('message sent')
+
+def getMessages(request, room):
+    room_details = Room.objects.get(name = room)
+
+    messages = Message.objects.filter(room = room_details.id)
+    return JsonResponse({"messages":list(messages.values())})
+
 
 @login_required(login_url='core:signinSignup')
 def logout(request):

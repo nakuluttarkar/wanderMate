@@ -39,7 +39,8 @@
                     {% endfor %}
                     <div class="action-button">
                         <div class="interaction-buttons">
-                            <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span>
+                            {% comment %} <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span> {% endcomment %}
+                            <span><a class="like-button" href="#" data-post-id="{{ post.id }}"><i class="uil-heart"></i></a></span>
                             <span><i class="uil-comment-dots"></i></i></span>
                             <span><i class="uil-share-alt"></i></i></span>
                         </div>
@@ -48,10 +49,10 @@
                         </div>                         
                     </div>
 
-                    <div class="liked-by">
-                        <span><img src="nish.png"></span>
+                    <div class="liked-by" id="like-count-{{ post.id }}">
+                        {% comment %} <span><img src="nish.png"></span>
                         <span><img src="pramada.jpg"></span>
-                        <span><img src="nakul.png"></span>
+                        <span><img src="nakul.png"></span> {% endcomment %}
                         {% if post.no_of_likes == 0 %}
                         <p>No likes</p>
                         {% elif post.no_of_likes == 1 %}

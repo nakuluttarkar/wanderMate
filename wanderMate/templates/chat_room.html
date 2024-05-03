@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Chat Room</title>
+    <link rel="stylesheet" href="{% static 'css/chat_room.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="chat-room">
+        <div class="back-to-home">
+            <a href="/" class="btn-back"><i class="fas fa-home"></i> Back to Home</a>
+        </div>
+        <div class="chat-header">
+            <h2>{{room}}<h2>
+            <h3>Group Chat</h3>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            {% comment %} <div class="message">
+                <div class="message-content">
+                    <span class="username">John:</span>
+                    <span class="text">Hello everyone!</span>
+                </div>
+                <div class="timestamp">12:30 PM</div>
+            </div> {% endcomment %}
+            
+            
+
+
+            <!-- More messages go here -->
+        </div>
+        <script>
+            $(document).ready(function(){
+            console.log("hello from ajax for get messages")
+            setInterval(function(){
+                $.ajax({
+                    type: 'GET',
+                    url : "/getMessages/{{room}}/",
+                    success: function(response){
+                        console.log(response);
+                        $("#chat-messages").empty();
+                        for (var key in response.messages)
+                        {
+
+                            var temp="<div class = 'message'> <div class = 'message-content'> <span class = 'username'> "+ response.messages[key].user +": </span><span class='text'>" +response.messages[key].value + "</span></div><div class='timestamp'>" + response.messages[key].date + "</div></div>";
+                            console.log(temp)
+                            $("#chat-messages").append(temp);
+                        }
+                    },
+                    error: function(response){
+                        
+                    }
+                });
+            },500);
+            })
+            </script>
+        <form class="chat-input" id="post-form">
+            {%csrf_token%}
+            <input type="hidden" name="username" id="username" value="{{username}}"/>
+            <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
+            <input type="text" name = "message" id="message" placeholder="Type your message...">
+            <button type = "submit" value="send" ><i class="fas fa-paper-plane"></i></button> 
+        </form>
+    </div>
+</body>
+
+<script type="text/javascript">
+    console.log("hello from ajax")
+    $(document).on('submit','#post-form',function(e){
+      e.preventDefault();
+  
+      $.ajax({
+        type:'POST',
+        url:'/send',
+        data:{
+            username:$('#username').val(),
+            room_id:$('#room_id').val(),
+            message:$('#message').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data){
+           //alert(data)
+        }
+      });
+      document.getElementById('message').value = ''
+    });
+  </script>
+</html>

@@ -14,7 +14,10 @@
             <form method="post" action="{% url 'core:leave_group' group_id=group.id %}">
                 {% csrf_token %}
                 <button type = "submit" class="chat-button">Leave Group</button>
+                
             </form>
+             
+            <a id = "post-form" href = "{% url 'core:checkRoom' group.id user.username %}"><button class="chat-button" type="submit" style="background-color:green">Chat</button></a>
             {% else %}
             <form method="post" action="{% url 'core:join_group' group_id=group.id %}">
                 {% csrf_token %}

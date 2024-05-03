@@ -29,6 +29,10 @@ urlpatterns = [
     path('create_post/', views.create_post, name = "create_post"),
     path('chat/', views.chat, name = "chat"),
     # path('chat-room/',views.chat_room, name="chat_room"),
+    path('checkRoom/<int:group_id>/<str:username>/', views.check_room, name='checkRoom'),
+    path('<str:room>/', views.chat_room, name = "chat_room"), 
+    path('send', views.send, name="send"),
+    path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
     path('logout/', views.logout, name = "logout"),
 
 ]

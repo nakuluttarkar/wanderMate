@@ -5,7 +5,7 @@ const messagesNotification = document.getElementById('messages-notification');
 const messages = document.getElementById('messages');
 
 //message-search
-const message = messages.getElementsByClassName('message');
+// const message = messages.getElementsByClassName('message');
 const messageSearch= document.querySelector('#message-search');
 
 //remove active class fucntion
@@ -78,4 +78,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+$(document).on('click', '.like-button', function(e) {
+    e.preventDefault();  // Prevent default action of anchor tag
+
+    var postID = $(this).data('post-id');
+
+    $.ajax({
+        type: 'GET',
+        url: '/like-post/',
+        data: {
+            post_id: postID,
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data) {
+            if (data.success) {
+                $('#like-count-' + postID).html('<p>Liked by ' + data.likes + ' people</p>');
+            } else {
+                console.log('Failed to update like count.');
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error('Error:', textStatus);
+        }
+    });
+});
+
+
 console.log("hello1")

@@ -1,0 +1,119 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.btn-back i {
+    margin-right: 5px;
+}
+
+.chat-messages {
+    padding: 20px;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+
+.message-content {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.username {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: #999;
+    margin-left: 10px;
+}
+
+
+.btn-back i {
+    margin-right: 5px;
+}
+
+.chat-room {
+    max-width: 40%;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.chat-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.chat-messages {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+
+.username {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.chat-input {
+    margin-top: 20px;
+    width : 100%;
+}
+
+.chat-input input {
+    width: 75%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width : 20%;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+}
