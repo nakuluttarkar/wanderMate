@@ -6,9 +6,14 @@
     
     <div class="group-profile">
         <div class="group-info">
-            <img src="taj.jpg" alt="Group Photo">
+            {% if group.group_image %}
+            <img src="{{group.group_image.url}}" alt="Group Photo">
+            {% else %}
+            <img src="/media/defaultImage.png">
+            {% endif %}
             <h1>{{ group.name }}</h1>
             <p>{{ group.description }}</p>
+            <p>Group created by : {{group.creator}} </p>
 
             {% if user in group.participants.all %}
             <form method="post" action="{% url 'core:leave_group' group_id=group.id %}">
@@ -17,6 +22,13 @@
                 
             </form>
              
+            <a id = "post-form" href = "{% url 'core:checkRoom' group.id user.username %}"><button class="chat-button" type="submit" style="background-color:green">Chat</button></a>
+            {% elif user == group.creator %}
+            <form method="post" action="{% url 'core:search_users_for_group' group_id=group.id %}" class="search-users-form">
+                {% csrf_token %}
+                <input type="text" name="query" class="search-users-text" placeholder="Search users...">
+                <button type = "submit" class="search-users-button">Search</button>
+            </form>
             <a id = "post-form" href = "{% url 'core:checkRoom' group.id user.username %}"><button class="chat-button" type="submit" style="background-color:green">Chat</button></a>
             {% else %}
             <form method="post" action="{% url 'core:join_group' group_id=group.id %}">
@@ -29,16 +41,80 @@
         </div>
 
         <div class="members">
+            
+
+
+            <h2>Creator</h2>
+            <ul class="member-list">
+                
+                <a href = "{% url 'core:profile' group.creator %}"><li><img src="{{ group_creator.profile_img.url }}" alt="User Profile Image">{{group_creator.user.username}}</li><a>
+                
+                {% comment %} <li><img src="dp3.jpeg" alt="User 2">Maya</li>
+                <li><img src="dp5.jpeg" alt="User 3">Kaushik</li> {% endcomment %}
+                <!-- Add more members here -->
+            </ul>
             <h2>Members</h2>
             <ul class="member-list">
                 {% for participant in participant_profiles %}
-                <a href = "{% url 'core:profile' participant.user.username %}"><li><img src="{{ participant.profile_img.url }}" alt="User Profile Image">{{participant.user.username}}</li><a>
+                <a href = "{% url 'core:profile' participant.user.username %}">
+
+                    {% if user == group.creator %}
+                            <a href = "{% url 'core:remove_participant' group_id=group.id user_id=participant.id_user %}" style = "margin-left:auto; margin-right:10px; color:red">x</a> 
+                    {% endif %}
+                    <li style= "">
+                        {% if participant.profile_img.url %}
+                        <img src="{{ participant.profile_img.url }}" alt="User Profile Image">
+                        {% else %}
+                        <img src="/media/defaultProfileImg.jpeg" alt="User Profile Image">
+                        {% endif %}
+                        <span style = "flex-grow: 1;">{{participant.user.username}}</span>
+
+                    </li>
+                    
+                <a>
                 {% endfor %}
                 {% comment %} <li><img src="dp3.jpeg" alt="User 2">Maya</li>
                 <li><img src="dp5.jpeg" alt="User 3">Kaushik</li> {% endcomment %}
                 <!-- Add more members here -->
             </ul>
         </div>
+        {% if username_profile_list %}
+            <div class="user-search-result">
+            <h2>Search Results</h2>
+            <ul class="member-list">
+                {% for user in username_profile_list %}
+                    <a href = "{% url 'core:profile' user.user.username %}">
+                        <div >
+                            <li class = "search-result-username-li">
+                                {% if user.profile_img %}
+                                <img src="{{ user.profile_img.url }}" alt="User Profile Image">
+                                
+                                {% else %}
+                                <img src="/media/defaultProfileImg.jpeg" alt="User Profile Image">
+                                {% endif %}
+                                {{user.user.username}}
+                                {% if user.user in group.participants.all %}
+                                    <form method="post" action="{% url 'core:remove_participant' group_id=group.id user_id=user.id_user %}">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background-color:red">Remove Participant</button>
+                                {% else %}
+                                    <form method="post" action="{% url 'core:add_participant' group_id=group.id user_id=user.id_user %}">
+                                        {% csrf_token %}
+                                        <button type="submit" style="background-color:green">Add Participant</button>
+                                    </form>
+                                {% endif %}
+                            </form>
+                            </li>
+                        </div>
+                    <a>
+                    
+                    
+                {% endfor %}
+                {% comment %} <li><img src="dp3.jpeg" alt="User 2">Maya</li>
+                <li><img src="dp5.jpeg" alt="User 3">Kaushik</li> {% endcomment %}
+                <!-- Add more members here -->
+            </ul>
+        {% endif %}
     </div>
 
     <script src="script.js"></script>

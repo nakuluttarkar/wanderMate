@@ -79,6 +79,49 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+$(document).on('click', '.view-comments', function(e) {
+    e.preventDefault();  // Prevent default action of anchor tag
+
+    var postID = $(this).data('post-id');
+    console.log(postID)
+    $.ajax({
+        type: 'GET',
+        url: '/view_comments/',
+        data: {
+            post_id: postID,
+            // csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data) {
+            console.log(data.comments)
+            // Assuming data.comments is an array of comment objects
+            var commentsHTML = '';
+            data.comments.forEach(function(comment) {
+                commentsHTML += '<p>' + comment.text + '</p>';
+            });
+            $('#comments-container').html(commentsHTML);
+            $('#popup-box').show();  // Display the modal
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error('Error:', textStatus);
+        }
+    });
+});
+
+$(document).on('click', '.close-modal', function(e) {
+    e.preventDefault();
+    $('#popup-box').hide();  // Hide the modal when close button is clicked
+});
+
+function openModal() {
+    document.body.classList.add('modal-open');
+    document.getElementById('popup-box').style.display = 'flex';
+}
+
+function closeModal() {
+    document.body.classList.remove('modal-open');
+    document.getElementById('popup-box').style.display = 'none';
+}
+
 $(document).on('click', '.like-button', function(e) {
     e.preventDefault();  // Prevent default action of anchor tag
 
@@ -103,6 +146,9 @@ $(document).on('click', '.like-button', function(e) {
         }
     });
 });
+
+
+
 
 
 console.log("hello1")

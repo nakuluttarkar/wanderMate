@@ -8,11 +8,12 @@ app_name = 'core'
 
 urlpatterns = [
     path('',views.index, name="index"),
+    path('logout/', views.logout, name = "logout"),
     path('settings/',views.settings, name = "settings"),
     path('signin_signup/', views.signin_signup, name = "signinSignup"),
     path('like-post/',views.like_post, name = 'like-post'),
     path('add_comment', views.add_comment, name = "add_comment"),
-    path('view_comments', views.view_comments, name="view_commens"),
+    path('view_comments/', views.view_comments, name="view_comments"),
     path('follow',views.follow, name="follow"),
     path('follower_list/', views.follower_list, name = "follower_list"),
     path('search',views.search, name="search"),
@@ -33,6 +34,6 @@ urlpatterns = [
     path('<str:room>/', views.chat_room, name = "chat_room"), 
     path('send', views.send, name="send"),
     path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
-    path('logout/', views.logout, name = "logout"),
+    
 
 ]

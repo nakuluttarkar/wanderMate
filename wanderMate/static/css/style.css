@@ -31,10 +31,14 @@
     border: none;
 }
 body{
+    /* filter: blur(5px); */
     font-family: 'Playpen Sans', cursive;
     color: var(--color-dark);
     background: var(--color-light);
     overflow-x: hidden;
+}
+body.modal-open {
+    filter: blur(5px);
 }
 
 
@@ -894,14 +898,24 @@ input[type="text"],
 
 .modal {
     position: fixed;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
     background: rgba(234, 226, 226, 0.7);
     display: none;
     align-items: center;
     justify-content: center;
+    z-index: 9999; /* Ensure the modal is on top of blurred background */
 }
 
 .popup-content {
+    width:300px;
+    height:300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     position: relative;
     background: white;
     padding: 1em 2em;
@@ -911,6 +925,17 @@ input[type="text"],
 .modal:target {
     display: flex;
 }
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #000;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+
 
 /* Group details page */
 
@@ -958,6 +983,10 @@ input[type="text"],
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    background-color: white;
+    text-decoration: none;
+    color: black;
+    border-radius: 20px;
 }
 
 .member-list li img {
@@ -965,6 +994,39 @@ input[type="text"],
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+}
+
+
+
+.member-list li button {
+    background-color:#007bff ;
+    margin-right: 5px;
+}
+
+.member-list .search-result-username-li{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    /* background-color: rgb(213, 210, 210); */
+    text-decoration: none;
+    color: black;
+    border-radius: 23px;
+}
+
+.member-list .search-result-username-li img{
+    width: 50px; 
+    height: 50px;
+    border-radius: 50%; 
+    margin-right: 10px; 
+}
+
+.member-list .search-result-username-li form{
+    margin-left: auto;
+}
+
+.member-list .search-result-username-li button{
+    border-radius: 25px;
+    background-color: #007bff;
 }
 
 .chat-button {
@@ -980,4 +1042,27 @@ input[type="text"],
 
 .chat-button:hover {
     background-color: #0056b3;
+}
+
+.search-users-form{
+    display: flex;
+    align-items: center;
+}
+
+.search-users-text{
+    margin-top: 5px;
+    /* flex: 1; */
+    margin-right: 10px;
+    width:30%;
+    
+}
+
+.search-users-button{
+    align-items: center;
+    background-color: #007bff;
+    height:30px;
+}
+
+.like-button.liked i.uil-heart {
+    color: red; /* Set the color to red when the post is liked */
 }

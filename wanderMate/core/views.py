@@ -57,7 +57,7 @@ def index(request):
     
     user = request.user
     user_groups = TravelGroup.objects.filter(participants=user)
-    
+    user_created_groups = TravelGroup.objects.filter(creator = user)
     
     #user recommendation starts
 
@@ -70,7 +70,8 @@ def index(request):
     
     return render(request,'index.html', {'user_profile': user_profile,
                                          'posts':feed_list,
-                                         'user_groups': user_groups})
+                                         'user_groups': user_groups,
+                                         'user_created_groups': user_created_groups})
 
 # settings page (Profile editing)
 @login_required(login_url='core:signinSignup')
@@ -302,11 +303,13 @@ def create_post(request):
     return render(request, 'create_post.html')
 
 def create_group(request):
+    
     if request.method == 'POST' :
+
         group_name = request.POST['group_name']
         location = request.POST['location']
         description = request.POST['description']
-        image = request.FILES.get('group_image')
+        image = request.FILES.get('group-image')
 
         group = TravelGroup.objects.create(name=group_name, 
                                            description=description, 
@@ -356,13 +359,20 @@ def add_comment(request):
         comments = Comment.objects.filter(post = post)
         print("post_id = ", post_id)
         print("comment = ", comment)
-    return render(request, "comments.html", {'post':post, 'comments':comments})
+    return HttpResponse("Comment added")
 
 def view_comments(request):
+    print("hello")
+    if request.method == 'GET' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         post_id = request.GET.get('post_id')
-        post = Post.objects.get(id = post_id)
-        comments = Comment.objects.filter(post = post)
-        return render(request, "comments.html", {'post':post, 'comments':comments})
+        post = Post.objects.get(id=post_id)
+        comments = Comment.objects.filter(post=post).values('text')
+        comments_list = list(comments)
+        print("COMMENTS = ", comments_list)
+        return JsonResponse({'comments': comments_list})
+    else:
+        print("hello comments")
+        return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def follow(request):
@@ -398,19 +408,16 @@ def search(request):
         
     return render(request, 'searchView.html', {'username_profile_list' : username_profile_list, 'group_list':group_list}) 
 
-# def search_groups(request):
-#     if request.method == 'POST':
-#         search_group = request.POST['group_name']
-        
-
-#     return render(request, 'search_group.html', {'group_list':group_list})
-
 @login_required(login_url='core:signinSignup')
 def search_users_for_group(request, group_id):
     user = request.user
     group = TravelGroup.objects.get(id=group_id)
     is_participant = request.user in group.participants.all()
+
+    participants = group.participants.all()
+    participant_profiles = Profile.objects.filter(user__in=participants)
     
+    group_creator_profile = Profile.objects.filter(user=group.creator)
 
     print("hello world" , request.POST)
     if request.method == 'POST' :
@@ -418,13 +425,14 @@ def search_users_for_group(request, group_id):
         username_profile_list = searchForuser(search_username)
         print("hello" , username_profile_list)
 
-    context = {'group': group, 'user':user, 'is_participant': is_participant, 'username_profile_list' : username_profile_list}
-    return render(request, 'group_detail.html', context)
+    context = {'group': group, 'user':user, 'is_participant': is_participant, 'username_profile_list' : username_profile_list, 'participant_profiles': participant_profiles, 'group_creator': group_creator_profile}
+    return render(request, 'groupView.html', context)
 
 @login_required(login_url='core:signinSignup')
 def add_participant(request, group_id, user_id):
     group = TravelGroup.objects.get(id=group_id)
     user = User.objects.get(id=user_id)
+    print(user.username, "user added")
     group.participants.add(user)
     return redirect('core:group_detail', group_id=group_id)
 
@@ -433,17 +441,22 @@ def remove_participant(request, group_id, user_id):
     group = TravelGroup.objects.get(id=group_id)
     user = User.objects.get(id=user_id)
     group.participants.remove(user)
+    print(user.username, "user removed")
     return redirect('core:group_detail', group_id=group_id)
 
 @login_required(login_url='core:signinSignup')
 def group_detail(request, group_id):
     user = request.user
     group = TravelGroup.objects.get(id=group_id)
+    
     is_participant = request.user in group.participants.all()
     participants = group.participants.all()
     participant_profiles = Profile.objects.filter(user__in=participants)
+    group_creator_profile = Profile.objects.filter(user=group.creator)
     print(participant_profiles)
-    context = {'group': group, 'user':user, 'is_participant': is_participant,'participant_profiles': participant_profiles}
+    print(group_creator_profile)
+    context = {'group': group, 'user':user, 'is_participant': is_participant,'participant_profiles': participant_profiles, 'group_creator': group_creator_profile,}
+    print(context)
     return render(request, 'groupView.html', context)
 
 @login_required(login_url='core:signinSignup')
@@ -492,7 +505,8 @@ def check_room(request, group_id, username):
         new_room.save()
         print("Created new room:", new_room)
         return redirect('/' + group_name + '/?username=' + username)    
-    
+
+@login_required(login_url='core:signinSignup')    
 def chat_room(request, room):
     username = request.GET.get('username')
     print(room)
@@ -503,6 +517,7 @@ def chat_room(request, room):
     except Room.DoesNotExist:
         return HttpResponse("No room")
 
+@login_required(login_url='core:signinSignup')
 def send(request):
     message = request.POST['message']
     username = request.POST['username']
@@ -514,6 +529,7 @@ def send(request):
     print("hello before http response")
     return HttpResponse('message sent')
 
+@login_required(login_url='core:signinSignup')
 def getMessages(request, room):
     room_details = Room.objects.get(name = room)
 
@@ -523,6 +539,7 @@ def getMessages(request, room):
 
 @login_required(login_url='core:signinSignup')
 def logout(request):
+    print("logout")
     auth.logout(request)
     return redirect('core:signinSignup')
 

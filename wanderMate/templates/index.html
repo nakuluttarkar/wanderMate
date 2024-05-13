@@ -128,9 +128,14 @@
                         {% endfor %}
                         <div class="action-button">
                             <div class="interaction-buttons">
-                                {% comment %} <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span> {% endcomment %}
-                                <span><a class="like-button" href="#" data-post-id="{{ post.id }}"><i class="uil-heart"></i></a></span>
-                                <span><a onclick="openCommentsPopup('{{post.id}}')"><i class="uil-comment-dots"></i></i></a></span>
+                            
+                                <span>
+                                    <a class="like-button{% if user_has_liked_post %} liked{% endif %}" href="#" data-post-id="{{ post.id }}">
+                                        <i class="uil-heart{% if user_has_liked_post %} liked{% endif %}"></i>
+                                    </a>
+                                </span>
+                                
+                                <span><a href="#" class="view-comments" data-post-id="{{ post.id }}"><i class="uil-comment-dots"></i></a></span>
                                 <span><i class="uil-share-alt"></i></i></span>
                             </div>
                             <div class="bookmark">
@@ -160,29 +165,16 @@
                         </form>
                         
                         <div class="text-muted">
-                            <a href = "/view_comments?post_id={{post.id}}"> View all 10 comments </a>
+                            <a href="#" class="view-comments" data-post-id="{{ post.id }}">View all 10 comments</a>
                         </div>
                         
                         <div id="popup-box" class="modal">
                             <div class="popup-content">
-                                <h1 style=" margin-right:10px">
-                                    Comments    
-                                </h1>
-                                <p>Comment 1</p>
-                                <p>Comment 2</p>
-                                <p>Comment 3</p>
-                                <a
-                                    href="#"
-                                    style="
-                                        position: absolute;
-                                        top: 10px;
-                                        right: 10px;
-                                        color: #fe0606;
-                                        font-size: 30px;
-                                        text-decoration: none;
-                                    "
-                                    >&times;</a
-                                >
+                                <h1 style="margin-right:10px">Comments</h1>
+                                <div id="comments-container">
+                                    <!-- Comments will be loaded here dynamically -->
+                                </div>
+                                <a href="#" class="close-modal">&times;</a>
                             </div>
                         </div>
                     </div>
@@ -207,7 +199,7 @@
                         <div class="request">
                             <div class="info">
                                 <div class="dp">
-                                    <img src="dp4.png">
+                                    <img src="user_group.group_image.url">
                                 </div>
                                 <div>
                                     <h5>{{user_group.name}}</h5>
@@ -223,6 +215,28 @@
                                 <button class="btn">
                                     Decline
                                 </button>  {% endcomment %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    <h4>Your Groups</h4>
+                    <!------request 1 --------->
+                    {% for group in user_created_groups %}
+                    <a href="/group_detail/{{group.id}}">
+                        <div class="request">
+                            <div class="info">
+                                <div class="dp">
+                                    <img src="group.group_image.url">
+                                </div>
+                                <div>
+                                    <h5>{{group.name}}</h5>
+                                    <p class="text-muted">
+                                        {{group.travel_location}}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="action">
+                                
                             </div>
                         </div>
                     </a>

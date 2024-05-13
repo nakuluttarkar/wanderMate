@@ -56,7 +56,7 @@
 <body>
     <div class="container">
         <h2>Create Group</h2>
-        <form method="post" action="">
+        <form method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <label for = "group-image">Image:</label>
             <input type="file" id="image" name="group-image">
