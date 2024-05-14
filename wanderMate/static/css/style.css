@@ -911,8 +911,8 @@ input[type="text"],
 }
 
 .popup-content {
-    width:300px;
-    height:300px;
+    width:600px;
+    height:600px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -1065,4 +1065,23 @@ input[type="text"],
 
 .like-button.liked i.uil-heart {
     color: red; /* Set the color to red when the post is liked */
+}
+
+.comments-container{  
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        /* background-color: #a1a0a0;    */
+}
+
+.comment-box{
+    background-color: rgb(231, 231, 231);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.comment-box p{
+    margin-left: 4px;
 }

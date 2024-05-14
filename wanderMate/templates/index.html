@@ -158,20 +158,21 @@
                             <p><b>{{post.user}}</b> {{post.caption}} <span class="hashtag">#{{post.tag}}</span></p>
                         </div>
                         
-                        <form method = 'post' action = "/add_comment?post_id={{post.id}}">
+                        <form method = 'post' id="add-comment" action = "/add_comment?post_id={{post.id}}">
                             {% csrf_token %}
+                            <input type = "hidden" name = "post_id" value={{post.id}}>
                             <input type = "text" name = "comment" placeholder = "Add comment..." style="border-radius:20px;margin-top:3px; width:75%" >
                             <button type = "submit" style="border-radius:20px; background-color:#176B87">Submit Comment</button>
                         </form>
                         
-                        <div class="text-muted">
+                        {% comment %} <div class="text-muted">
                             <a href="#" class="view-comments" data-post-id="{{ post.id }}">View all 10 comments</a>
-                        </div>
+                        </div> {% endcomment %}
                         
                         <div id="popup-box" class="modal">
                             <div class="popup-content">
                                 <h1 style="margin-right:10px">Comments</h1>
-                                <div id="comments-container">
+                                <div id="comments-container" class="comments-container">
                                     <!-- Comments will be loaded here dynamically -->
                                 </div>
                                 <a href="#" class="close-modal">&times;</a>

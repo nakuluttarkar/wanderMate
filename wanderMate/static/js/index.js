@@ -79,6 +79,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// $(document).on('submit','#add-comment',function(e){
+//     e.preventDefault();
+//     var postID = $(this).data('post-id');
+//     $.ajax({
+//       type:'POST',
+//       url:'/send',
+//       data:{
+//           username:$('#username').val(),
+//           room_id:$('#room_id').val(),
+//           message:$('#message').val(),
+//         csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+//       },
+//       success: function(data){
+//          //alert(data)
+//       }
+//     });
+//     document.getElementById('message').value = ''
+//   });
+
+
 $(document).on('click', '.view-comments', function(e) {
     e.preventDefault();  // Prevent default action of anchor tag
 
@@ -89,14 +109,11 @@ $(document).on('click', '.view-comments', function(e) {
         url: '/view_comments/',
         data: {
             post_id: postID,
-            // csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function(data) {
-            console.log(data.comments)
-            // Assuming data.comments is an array of comment objects
             var commentsHTML = '';
             data.comments.forEach(function(comment) {
-                commentsHTML += '<p>' + comment.text + '</p>';
+                commentsHTML += '<div class="comment-box"><p><strong>' + comment.user__username + ':</strong> ' + comment.text + '</p></div>';
             });
             $('#comments-container').html(commentsHTML);
             $('#popup-box').show();  // Display the modal
@@ -106,6 +123,7 @@ $(document).on('click', '.view-comments', function(e) {
         }
     });
 });
+
 
 $(document).on('click', '.close-modal', function(e) {
     e.preventDefault();

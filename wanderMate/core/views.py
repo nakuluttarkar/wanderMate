@@ -362,17 +362,15 @@ def add_comment(request):
     return HttpResponse("Comment added")
 
 def view_comments(request):
-    print("hello")
     if request.method == 'GET' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         post_id = request.GET.get('post_id')
         post = Post.objects.get(id=post_id)
-        comments = Comment.objects.filter(post=post).values('text')
+        comments = Comment.objects.filter(post=post).values('text', 'user__username')
         comments_list = list(comments)
-        print("COMMENTS = ", comments_list)
         return JsonResponse({'comments': comments_list})
     else:
-        print("hello comments")
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 
 def follow(request):
