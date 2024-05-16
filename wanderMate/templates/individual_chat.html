@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <link rel="stylesheet" href="{% static 'css/individual_chat.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="home-link">
+                <a href="/chat"><i class="fas fa-arrow-left" style = "margin-right:10px"></i></a>
+                <a href="/"><i class="fas fa-home"></i></a>
+            </div>
+            <div class="recipient-info">
+                <span class="recipient-name">{{follower}}</span>
+            </div>
+        </div>
+        
+        <div class="chat-box" id="chat-messages">
+
+            
+        </div>
+        <script>
+            $(document).ready(function(){
+                console.log("hello forom display")
+                setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url: '/getMessages/{{ room }}/',
+                        success: function(response){
+                            $("#chat-messages").empty();
+                            for (var key in response.messages){
+                                var message = response.messages[key];
+                                var messageClass = message.user === "{{ username }}" ? 'sent' : 'received';
+                                var messageElement = `
+                                    <div class="message ${messageClass}">
+                                        <div class="message-content">
+                                            <div class="message-header">
+                                                <span class="sender-name">${message.user } </span><br>
+                                                <span class="message-time"> ${ message.date}</span>
+                                            </div>
+                                            <p>${message.value}</p>
+                                        </div>
+                                    </div>`;
+                                $("#chat-messages").append(messageElement);
+                            }
+                        },
+                        error: function(response){
+                            // Handle errors
+                        }
+                    });
+                }, 500);
+            });
+
+        </script> 
+
+
+
+
+        <div class="chat-input-div">
+            <form class="chat-input" id="post-form">
+                {%csrf_token%}
+                <input type="hidden" name="username" id="username" value="{{username}}"/>
+                <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
+                <input type="text" name = "message" id="message" placeholder="Type a message..." style="width:100%; border-radius:15px; margin-right:5px">
+                <button type="submit" value="send"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    console.log("hello from ajax")
+    $(document).on('submit','#post-form',function(e){
+      e.preventDefault();
+  
+      $.ajax({
+        type:'POST',
+        url:'/send',
+        data:{
+            username:$('#username').val(),
+            room_id:$('#room_id').val(),
+            message:$('#message').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data){
+           //alert(data)
+        }
+      });
+      document.getElementById('message').value = ''
+    });
+
+    
+  </script>
+</html>

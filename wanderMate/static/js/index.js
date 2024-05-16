@@ -79,24 +79,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// $(document).on('submit','#add-comment',function(e){
-//     e.preventDefault();
-//     var postID = $(this).data('post-id');
-//     $.ajax({
-//       type:'POST',
-//       url:'/send',
-//       data:{
-//           username:$('#username').val(),
-//           room_id:$('#room_id').val(),
-//           message:$('#message').val(),
-//         csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-//       },
-//       success: function(data){
-//          //alert(data)
-//       }
-//     });
-//     document.getElementById('message').value = ''
-//   });
+$(document).on('submit','#add-comment',function(e){
+    e.preventDefault();
+    var formData = $(this).serialize();
+    var commentInput = $(this).find('.comment-value')
+    console.log("form data = " + formData);
+    $.ajax({
+      type:'POST',
+      url: '/add_comment/',
+      data: formData,
+      success: function(data) {
+        // Display success message or handle response
+        // console.log('Comment added successfully');
+        // You can update the UI here if needed
+        commentInput.val('')
+        },
+        error: function(xhr, textStatus, errorThrown) {
+        console.error('Error:', textStatus);
+        // Handle errors
+        }
+    });
+    document.getElementsByClassName('.comment-value').value = '';
+  });
 
 
 $(document).on('click', '.view-comments', function(e) {

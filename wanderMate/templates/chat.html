@@ -58,31 +58,17 @@
 
         {% for follower in followers_list %}
         <li class="chat-item" href = "#">
-            <a href = "/chat-room?user_name={{follower.follower}}">
-            <img src="profile1.jpg" alt="Profile Image" class="profile-img">
+            <a href = "{% url 'core:user_chat_room' follower.follower user.username %}" style = "text-decoration:none">
+            {% comment %} <img src="profile1.jpg" alt="Profile Image" class="profile-img"> {% endcomment %}
             <div class="chat-info">
-                <div class="sender">{{follower.follower}}</div>
-                <div class="last-message">Hi there!</div>
+                <div class="sender">{{follower.follower}}</div> 
+                <p>{{follower.follower.user.username}}</p>
+                <div class="last-message">Chat with {{follower.follower}}</div>
             </div>
             </a>
         </li>
         {% endfor %}
-        <li class="chat-item" onclick="location.href='#';">
-            <a href = "#">
-            <img src="profile2.jpg" alt="Profile Image" class="profile-img">
-            <div class="chat-info">
-                <div class="sender">Jane Smith</div>
-                <div class="last-message">Hey, how are you?</div>
-            </div>
-        </li>
-        <li class="chat-item" onclick="location.href='#';">
-            <a href = "#">
-            <img src="profile3.jpg" alt="Profile Image" class="profile-img">
-            <div class="chat-info">
-                <div class="sender">Mike Johnson</div>
-                <div class="last-message">I'm good, thanks!</div>
-            </div>
-        </li>
+        
         <!-- Add more chat items as needed -->
     </ul>
 </body>

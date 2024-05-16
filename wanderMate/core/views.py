@@ -14,6 +14,7 @@ from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup,
 from django.contrib.auth import authenticate, login
 import random
 import time 
+import pytz
 
 def generate_otp():
     otp = ''.join(random.choices('0123456789', k = 6))
@@ -349,17 +350,22 @@ def like_post(request):
 
 @login_required(login_url='core:signinSignup')
 def add_comment(request):
-    if request.method == 'POST':
-        post_id = request.GET.get('post_id')
-        post = Post.objects.get(id = post_id)
-        comment = request.POST['comment']
+    print("request.POST = ", request.POST)
+    print("hello add_comment COMMENTS")
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        post_id = request.POST.get('post_id')
+        post = Post.objects.get(id=post_id)
+        comment_text = request.POST['comment']
+        print("COMMENT TEXT", comment_text)
         user = request.user
-        comment = Comment.objects.create(post=post, user=user, text=comment)
+        comment = Comment.objects.create(post=post, user=user, text=comment_text)
+        comment.save()
+        # You may return data or a success message in JSON format
+        return JsonResponse({'success': True, 'message': 'Comment added successfully'})
+    else:
+        # Handle invalid requests
+        return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
 
-        comments = Comment.objects.filter(post = post)
-        print("post_id = ", post_id)
-        print("comment = ", comment)
-    return HttpResponse("Comment added")
 
 def view_comments(request):
     if request.method == 'GET' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -481,11 +487,49 @@ def follower_list(request):
 def chat(request):
     user_name = request.user
     followers_list = FollowersCount.objects.filter(user = user_name)
-    print(followers_list)
+    # print("followers LIST = ", followers_list.follower)
     return render(request, 'chat.html', {'followers_list':followers_list})
 
 # def chat_room(request):
 #     user_chat = request.GET.get('user_name')
+
+@login_required(login_url='core:signinSignup')
+def user_chat_room(request, follower, username):
+    print("Username = ", username)
+    print("follower = ", follower)
+
+    user = User.objects.get(username = follower)
+    follower_profile = Profile.objects.get(user = user)
+
+    user = User.objects.get(username = username)
+    user_profile = Profile.objects.get(user = user)
+
+    print(follower_profile.id_user , user_profile.id_user)
+    temp = (follower_profile.id_user*follower_profile.id_user*follower_profile.id_user)+ (user_profile.id_user*user_profile.id_user*user_profile.id_user)
+    temp_str = str(temp)
+    print(temp, temp_str)
+    room_name = temp_str
+    try:
+        room = Room.objects.get(name=room_name)
+        print("Room already exists:", room)
+        return redirect('core:individual_chat_room', room=room, follower=follower, username=username)
+    except Room.DoesNotExist:
+        new_room = Room.objects.create(name=room_name)
+        new_room.save()
+        print("Created new room:", new_room)
+        return redirect('core:individual_chat_room', room=room, follower=follower, username=username )
+    
+def individual_chat_room(request, room, follower, username):
+    print("INDIVIDUAL CHAT ROOM")
+    
+    print(room)
+    try:
+        room_details = Room.objects.get(name=room)
+
+        return render(request, "individual_chat.html", {'username':username, 'room_details':room_details, 'room':room, 'follower':follower})
+    except Room.DoesNotExist:
+        return HttpResponse("No room")
+
     
 @login_required(login_url='core:signinSignup')
 def check_room(request, group_id, username):
@@ -532,6 +576,13 @@ def getMessages(request, room):
     room_details = Room.objects.get(name = room)
 
     messages = Message.objects.filter(room = room_details.id)
+
+    for message in messages :
+        utc_time = message.date.astimezone(pytz.utc)
+        ist_time = utc_time.astimezone(pytz.timezone('Asia/Kolkata'))
+        message.date = ist_time.strftime("%H:%M %d-%m-%Y")
+
+
     return JsonResponse({"messages":list(messages.values())})
 
 
