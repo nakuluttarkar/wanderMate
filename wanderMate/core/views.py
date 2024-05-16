@@ -303,6 +303,16 @@ def create_post(request):
 
     return render(request, 'create_post.html')
 
+@login_required(login_url='core:signinSignup')
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.user == request.user.username:
+        post.delete()
+        messages.success(request, 'Post deleted successfully.')
+    else:
+        messages.error(request, 'You are not authorized to delete this post.')
+    return redirect('core:index') 
+
 def create_group(request):
     
     if request.method == 'POST' :
@@ -517,7 +527,7 @@ def user_chat_room(request, follower, username):
         new_room = Room.objects.create(name=room_name)
         new_room.save()
         print("Created new room:", new_room)
-        return redirect('core:individual_chat_room', room=room, follower=follower, username=username )
+        return redirect('core:individual_chat_room', room=new_room, follower=follower, username=username )
     
 def individual_chat_room(request, room, follower, username):
     print("INDIVIDUAL CHAT ROOM")

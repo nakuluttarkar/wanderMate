@@ -442,6 +442,34 @@ main .container .left .profile{
         margin-left: 0.5rem;
     } 
 
+    .middle .delete-post{
+        color: yellow;
+        text-align: center;
+        /* margin-top: 1rem; */
+        margin-bottom: 1rem;
+    }
+    
+    .middle .feeds .btn-delete {
+        background-color: #d94f4f;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: var(--card-border-radius);
+        cursor: pointer;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 3rem;
+    }
+    
+    .middle .feeds .btn-delete i {
+        margin-left: 0.5rem;
+    }
+    
+    .middle .feeds .btn-delete:hover {
+        background-color: #c9302c;
+    }
+
     .create-post-form-container{     
         max-width: 400px;
         margin: auto;

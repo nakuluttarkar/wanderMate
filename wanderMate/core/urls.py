@@ -28,6 +28,7 @@ urlpatterns = [
     path('profile/<str:pk>',views.profile, name = 'profile'),
     path('verify_otp/',views.verify_otp, name = "verify_otp"),
     path('create_post/', views.create_post, name = "create_post"),
+     path('delete_post/<uuid:post_id>/', views.delete_post, name='delete_post'),
     path('chat/', views.chat, name = "chat"),
     # path('chat-room/',views.chat_room, name="chat_room"),
     path('checkRoom/<int:group_id>/<str:username>/', views.check_room, name='checkRoom'),
