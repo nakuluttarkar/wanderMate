@@ -45,47 +45,15 @@
                     <a class="menu-item" href = "/chat">
                         <span><i class="uil uil-compass"></i></span><h3>Messages</h3>
                     </a>
-                    <a class="menu-item" id="notifications">
-                        <span><i class="uil uil-bell"><small class="notification-count">3+</small></i></span><h3>Notification</h3>
-                        <!----------------NOTIFICATION POPUP---------------------------->
-                        <div class="notifications-popup">
-                            <div>
-                                <div class="dp">
-                                    <img src="dp3.jpeg" alt="">
-                                </div>
-                                <div class="notifications-body">
-                                    <b>Nishmitha M</b> send you a message   
-                                    <small class="text-muted">2 DAYS AGO</small>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="dp">
-                                    <img src="dp4.png" alt="">
-                                </div>
-                                <div class="notifications-body">
-                                    <b>Pramada S H</b> waved at you
-                                    <small class="text-muted">2 DAYS AGO</small>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="dp">
-                                    <img src="dp5.jpeg" alt="">
-                                </div>
-                                <div class="notifications-body">
-                                    <b>Nakul U D </b>accepted your friend request
-                                    <small class="text-muted">2 DAYS AGO</small>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                    
                     <a class="menu-item" id="messages-notification">
                         <span><i class="uil uil-envelope"><small class="notification-count">6</small></i></span><h3>Explore</h3>
                     </a>
-                    <a class="menu-item" id="messages-notification">
+                    <!-- <a class="menu-item" id="messages-notification">
                         <span><i class="uil uil-palette"></i></span><h3>Theme</h3>
-                    </a>
+                    </a> -->
                     <a class="menu-item" id="messages-notification" href="{% url 'core:settings' %}">
-                        <span><i class="uil uil-setting"></i></span><h3>Settings</h3>
+                        <span><i class="uil uil-setting"></i></span><h3>Edit Profile</h3>
                     </a>
                     <!--CREATE POST BUTTON-->
                     <a href="{% url 'core:create_post' %}"><button for="create-post" class="btn btn-primary">Create Post</button></a>
@@ -93,9 +61,6 @@
             </div>
            <!--*****************************MIDDLE********************************-->
             <div class="middle">
-                <!--------Story---------->
-                
-                <!----END OF STORY------->
                 
                 <!-------FEEDS--------->
                 <div class="feeds">
@@ -117,9 +82,6 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <span class="edit">
-                                <i class="uil uil-ellipsis-h"></i>
-                            </span>
                         </div>
                         {% for image in post.images.all %}
                         <div class="photo" style="align-items:center">
@@ -136,10 +98,6 @@
                                 </span>
                                 
                                 <span><a href="#" class="view-comments" data-post-id="{{ post.id }}"><i class="uil-comment-dots"></i></a></span>
-                                <span><i class="uil-share-alt"></i></i></span>
-                            </div>
-                            <div class="bookmark">
-                                <span><i class="uil-bookmark"></i></span>
                             </div>                         
                         </div>
 
@@ -158,12 +116,13 @@
                             <p><b>{{post.user}}</b> {{post.caption}} <span class="hashtag">#{{post.tag}}</span></p>
                         </div>
                         
-                        <form method = 'post' id="add-comment" >
+                        <form method="post" id="add-comment">
                             {% csrf_token %}
-                            <input type = "hidden" name = "post_id" value={{post.id}}>
-                            <input type = "text" id="comment-text" class="comment-value" name = "comment" placeholder = "Add comment..." style="border-radius:20px;margin-top:3px; width:75%" >
-                            <button type = "submit" style="border-radius:20px; background-color:#176B87">Submit Comment</button>
+                            <input type="hidden" name="post_id" value="{{post.id}}">
+                            <input type="text" id="comment-text" class="comment-value" name="comment" placeholder="Add comment..." style="border-radius:20px; margin-top:3px; width:65%; display:inline-block;">
+                            <button type="submit" style="border-radius:20px;background-color:#176B87; display:inline-block;">Submit Comment</button>
                         </form>
+                        
                         
                         {% comment %} <div class="text-muted">
                             <a href="#" class="view-comments" data-post-id="{{ post.id }}">View all 10 comments</a>
@@ -254,9 +213,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="action">
-                            
-                            
+                        <div class="action">   
                         </div>
                     </div> 
                     {% endif %}

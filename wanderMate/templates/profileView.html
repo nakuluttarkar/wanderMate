@@ -13,7 +13,7 @@
                     <input type = "hidden" value = "{{user.username}}" name = "follower" />
                     <input type = "hidden" value = "{{user_object.username}}" name = "user" />
                     {% if user_object.username == user.username%}
-                    <a href = "/settings"><div style = "background-color:blue; width:60px; color:white; border-radius:3px">Edit Profile</div></a>
+                    <a href = "/settings"><div style = "background-color:#176B87; width:80px; color:white; border-radius:3px">Edit Profile</div></a>
                     {% else %}
                     <div class="follow-btn">
                         <button type="submit">{{follow_button_text}}</button>
@@ -22,10 +22,17 @@
                 </form>
             </div>
             <div class="follow-info">
-                <p><a href = "/follower_list?user_name={{user_object.username}}"><span>{{user_followers}}</span> Followers</p><a>
-                <p><span>{{user_following}}</span> Following</p>
-                <p style="align-items:center"><span>{{user_post_length}}</span> Posts</p>
+                <a href="/follower_list?user_name={{user_object.username}}" style="margin-right: 20px; text-decoration: none; color: inherit;">
+                    <span>{{user_followers}}</span> Followers
+                </a>
+                <p style="display: inline; margin-right: 20px;">
+                    <span>{{user_following}}</span> Following
+                </p>
+                <p style="display: inline;">
+                    <span>{{user_post_length}}</span> Posts
+                </p>
             </div>
+            
         </div>
         <div class="middle">
             <div class="feeds">
@@ -42,11 +49,7 @@
                             {% comment %} <span><a href = "/like-post?post_id={{post.id}}" ><i class="uil-heart"></i></a></span> {% endcomment %}
                             <span><a class="like-button" href="#" data-post-id="{{ post.id }}"><i class="uil-heart"></i></a></span>
                             <span><i class="uil-comment-dots"></i></i></span>
-                            <span><i class="uil-share-alt"></i></i></span>
-                        </div>
-                        <div class="bookmark">
-                            <span><i class="uil-bookmark"></i></span>
-                        </div>                         
+                        </div>                        
                     </div>
 
                     <div class="liked-by" id="like-count-{{ post.id }}">
@@ -64,9 +67,7 @@
                     <div class="caption">
                         <p><b>{{user_profile.user.username}}</b> {{post.caption}}<span class="hashtag">{{post.tag}}</span></p>
                     </div>
-                    <div class="text-muted">
-                        View all 10 comments
-                    </div>
+                    
                     
                           
                 </div>
