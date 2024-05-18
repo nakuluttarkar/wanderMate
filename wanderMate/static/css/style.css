@@ -757,6 +757,76 @@ input[type="text"],
     color: #666;
 }
 
+.chat-body {
+    font-family: 'Playpen Sans', cursive;
+    color: hsl(252, 30%, 17%);
+    background:hsl(252, 30%, 95%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.chat-container {
+    width: 80%; /* Adjust the width as needed */
+    max-width: 600px; /* Optional: set a maximum width */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Ensure child elements don't overflow the box */
+}
+
+.chat-header {
+    background-color: #176B87;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.chat-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 400px; /* Set a maximum height for the chat list */
+}
+
+.chat-item {
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-info {
+    flex: 1;
+}
+
+.sender {
+    font-weight: bold;
+    color: #176B87;
+}
+
+.last-message {
+    color: #888;
+}
 
 /******Responsive********/
 @media screen and (max-width: 1200px){
