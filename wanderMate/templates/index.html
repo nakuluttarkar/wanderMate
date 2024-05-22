@@ -23,20 +23,21 @@
             
             <div class="left">
                 <a class="profile" href = "/profile/{{user.username}}">
-                <div class="dp">
-                    {% if user_profile.profile_img %}
-                    <img src="{{user_profile.profile_img.url}}" alt="">
-                    {% else %}
-                    <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
-                    {% endif %}
-                </div>
-                <div class="handle">
-                    {% if user.is_authenticated %}
-                    <h4>{{user.username}}</h4>
-                    {% endif %}
-                    <!-- <p class="text-muted"> @rsjain
-                    </p> -->
-                </div>
+                    <div class="dp">
+                        {% if user_profile.profile_img %}
+                        <img src="{{user_profile.profile_img.url}}" alt="">
+                        {% else %}
+                        <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="handle">
+                        {% if user.is_authenticated %}
+                        <h4>{{user.username}}</h4>
+                        {% endif %}
+                        <!-- <p class="text-muted"> @rsjain
+                        </p> -->
+                    </div>
+                </a>
                 <!--SIDEBAR-->
                 <div class="sidebar">
                     <a class="menu-item active">
@@ -145,8 +146,7 @@
             <!-------End of feed------------->
             <!-----------------------RIGHT-------------->
             <div class="right">
-                
-                
+                             
                 <div class="requests">
                     {% if user_groups %}
                     <h4>Groups</h4>
@@ -179,11 +179,11 @@
                     <h4>Your Groups</h4>
                     <!------request 1 --------->
                     {% for group in user_created_groups %}
-                    <a href="/group_detail/{{group.id}}">
+                    <a href="/group_detail~/{{group.id}}">
                         <div class="request">
                             <div class="info">
                                 <div class="dp">
-                                    <img src="group.group_image.url">
+                                    <img src="{{group.group_image.url}}">
                                 </div>
                                 <div>
                                     <h5>{{group.name}}</h5>
@@ -200,7 +200,7 @@
                     {% endfor %}
                     <!-----request 2-------->
                     {% else %}
-                     <div class="request">
+                    <div class="request">
                         <div class="info">
                             
                             <div>

@@ -7,6 +7,7 @@ body {
     background-color: #f4f4f4;
 }
 
+
 .search-results {
     max-width: 1200px;
     margin: 0 auto;
@@ -18,23 +19,40 @@ body {
 .users, .groups {
     flex: 1;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 15px;
     padding: 20px;
+    background-color: white;
+    border: 2px solid black;
 }
 
 .users {
     margin-right: 20px;
+    border: 2px solid black;
+    background-color: white;
+}
+
+.users .user-header, .groups .user-header{
+    
+    background-color: #6dc6e3;
+    border-radius: 8px;
+    justify-content: center;
+    text-align: center;
 }
 
 h2 {
     margin-bottom: 20px;
     font-size: 24px;
+    padding: 10px 10px 10px 10px;
+    color:black;
 }
 
 .user-card, .group-card {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    /* background-color: #646c76; */
+    border:2px solid #646c76;
+    border-radius: 50px;
 }
 
 .profile-image, .group-image {
@@ -43,6 +61,7 @@ h2 {
     border-radius: 50%;
     overflow: hidden;
     margin-right: 20px;
+    /* padding: 10px 10x 10px 10px; */
 }
 
 .profile-image img, .group-image img {

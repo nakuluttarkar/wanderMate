@@ -431,7 +431,7 @@ def search_users_for_group(request, group_id):
     participants = group.participants.all()
     participant_profiles = Profile.objects.filter(user__in=participants)
     
-    group_creator_profile = Profile.objects.filter(user=group.creator)
+    group_creator_profile = Profile.objects.get(user=group.creator)
 
     print("hello world" , request.POST)
     if request.method == 'POST' :
@@ -466,7 +466,7 @@ def group_detail(request, group_id):
     is_participant = request.user in group.participants.all()
     participants = group.participants.all()
     participant_profiles = Profile.objects.filter(user__in=participants)
-    group_creator_profile = Profile.objects.filter(user=group.creator)
+    group_creator_profile = Profile.objects.get(user=group.creator)
     print(participant_profiles)
     print(group_creator_profile)
     context = {'group': group, 'user':user, 'is_participant': is_participant,'participant_profiles': participant_profiles, 'group_creator': group_creator_profile,}

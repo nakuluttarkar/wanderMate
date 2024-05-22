@@ -22,9 +22,9 @@
             </h2></a>
             <form action = "/search" method = "post" >
                 {% csrf_token %}
-                <div class="search-container" style="display: flex; align-items: center;">
-                    <input type="text" name="search" class="search-input" placeholder="Search..."  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;">
-                    <button type="submit" class="search-button" style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 40px; background-color: #f0f0f0; cursor: pointer;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
+                <div class="search-container" style="display: flex; align-items: center; justify-content: center;">
+                    <input type="text" name="search" class="search-input" placeholder="Search..."  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 8px; width: 200px; margin-top:5px">
+                    <button type="submit" class="search-button" style="padding: 8px 20px; border: 1px solid #ccc; border-radius: 40px; background-color: #176B87; cursor: pointer; margin-bottom: 5px;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
                 </div>
             </form>           
             <div class="create">

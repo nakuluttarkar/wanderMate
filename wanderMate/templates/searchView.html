@@ -6,14 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <link rel="stylesheet" href="{% static 'css/searchView.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    
+        
+    <nav style="background-color: #6dc6e3; padding: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: auto;">
+            <div style="flex: 1;">
+                <a href="/" style="text-decoration: none; color: white; font-size: 24px; font-weight: bold;"><i class="fas fa-home"></i></a>
+            </div>
+            <div style="flex: 2; display: flex; justify-content: center;">
+                <form action="/search" method="post" style="display: flex; align-items: center; margin: 0;">
+                    {% csrf_token %}
+                    <div class="search-container" style="display: flex; align-items: center;">
+                        <input type="text" name="search" class="search-input" placeholder="Search..." style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 8px; width: 200px;">
+                        <button type="submit" class="search-button" style="padding: 8px 20px; border: 1px solid #ccc; border-radius: 40px; background-color: #4d90fe; color: white; cursor: pointer;">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div style="flex: 1;"></div>
+        </div>
+    </nav>
+    
+    
     <div class="search-results">
         {% if username_profile_list %}
         <div class="users">
+            <div class = "user-header" >
             <h2>Users list</h2>
+            </div>
             {% for user in username_profile_list %}
-            <a href="/profile/{{user.user.username}}">
+            <a href="/profile/{{user.user.username}}" style = "color:black; text-decoration:none;">
             <div class="user-card">
                 <div class="profile-image">
                         {% if user.profile_img.url %}
@@ -33,13 +61,17 @@
             {% endfor %}
             <!-- Add more user cards as needed -->
         </div>
+        {% else %}
+            <h2> No users found </h2>
         {% endif %}
         {% if group_list %}
         <div class="groups">
             
-            <h2>Groups</h2>
+            <div class = "user-header">
+                <h2>Groups</h2>
+                </div>
             {% for group in group_list %}
-            <a href="/group_detail/{{group.id}}">
+            <a href="/group_detail/{{group.id}}" style = "color:black; text-decoration:none;">
             <div class="group-card">
                 <div class="group-image">
                         {% if group.profile_img.url %}
@@ -61,6 +93,7 @@
             <!-- Add more group cards as needed -->
         </div>
         {% else %}
+        
             <h2> No Groups Found </h2>
         {% endif %}
     </div>

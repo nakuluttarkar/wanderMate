@@ -28,6 +28,7 @@ class Post(models.Model):
     images = models.ManyToManyField('Image')
     caption = models.TextField()
     tag = models.CharField(max_length = 20, blank = True, null=True)
+    
     created_at = models.DateTimeField(default = datetime.now)
     no_of_likes = models.IntegerField(default = 0)
 
@@ -92,6 +93,21 @@ class Message(models.Model):
     date = models.DateTimeField(default=datetime.now, blank = True)
     user = models.CharField(max_length=100000)
     room = models.CharField(max_length=10000)
+
+# class Preference(models.Model):
+#     user_profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
+#     is_preference_given = models.BooleanField(default = False)
+#     beachs = models.BooleanField(default = False, blank = True)
+#     hill_stations = models.BooleanField(default = False, blank = True)
+#     mountains = models.BooleanField(default = False, blank = True)
+#     religious_places = models.BooleanField(default = False, blank = True)
+#     historical_places = models.BooleanField(default = False, blank = True)
+#     cities = models.BooleanField(default = False, blank = True)
+#     trekking = models.BooleanField(default = False, blank = True)
+#     desert = models.BooleanField(default = False, blank = True)
+#     islands = models.BooleanField(default = False, blank = True)
+
+
     
 
 
