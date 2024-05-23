@@ -15,10 +15,13 @@ class Profile(models.Model):
     profile_img = models.ImageField(upload_to = 'profile_images', default='defaultProfileImg.jpeg')
     location = models.CharField(max_length = 100, blank= True)
     otp_validated = models.BooleanField(default = False)
+    is_preference_given = models.BooleanField(default=False)
+    # preferences = models.ManyToManyField('Preference', blank=True)
     
 
     def __str__(self):
         return self.user.username
+    
     
 class Post(models.Model):
     id = models.UUIDField(primary_key = True, default = uuid.uuid4)
@@ -28,9 +31,10 @@ class Post(models.Model):
     images = models.ManyToManyField('Image')
     caption = models.TextField()
     tag = models.CharField(max_length = 20, blank = True, null=True)
-    
+    category = models.CharField(max_length=20, blank=True, null=True)
     created_at = models.DateTimeField(default = datetime.now)
     no_of_likes = models.IntegerField(default = 0)
+    
 
     def __str__(self):
         return self.user
@@ -62,6 +66,7 @@ class TravelGroup(models.Model):
     travel_location = models.CharField(max_length = 100, blank=True)
     description = models.TextField()
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_groups')
+    category = models.CharField(max_length=20, blank=True, null=True)
     participants = models.ManyToManyField(User, related_name='joined_groups')
     members = models.ManyToManyField(User, through='Membership')
 
@@ -94,18 +99,19 @@ class Message(models.Model):
     user = models.CharField(max_length=100000)
     room = models.CharField(max_length=10000)
 
-# class Preference(models.Model):
-#     user_profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
-#     is_preference_given = models.BooleanField(default = False)
-#     beachs = models.BooleanField(default = False, blank = True)
-#     hill_stations = models.BooleanField(default = False, blank = True)
-#     mountains = models.BooleanField(default = False, blank = True)
-#     religious_places = models.BooleanField(default = False, blank = True)
-#     historical_places = models.BooleanField(default = False, blank = True)
-#     cities = models.BooleanField(default = False, blank = True)
-#     trekking = models.BooleanField(default = False, blank = True)
-#     desert = models.BooleanField(default = False, blank = True)
-#     islands = models.BooleanField(default = False, blank = True)
+class Preference(models.Model):
+    user_profile = models.ForeignKey(Profile, on_delete = models.CASCADE, blank = True, default = None)
+    is_preference_given = models.BooleanField(default = False)
+    preferences = models.ManyToManyField('PreferenceOption')
+
+    def __str__(self):
+        return f"{self.user_profile.user.username} Preferences"
+
+class PreferenceOption(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
     

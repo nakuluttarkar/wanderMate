@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences Form</title>
+    <link rel="stylesheet" href="{% static 'css/preference.css'%}">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="{% url 'core:index' %}" style="color:black"><h2 class="logo">
+                WanderMate
+            </h2></a>
+            <form action = "/search" method = "post" >
+                {% csrf_token %}
+                <div class="search-container" style="display: flex; align-items: center;">
+                    <input type="text" name="search_username" class="search-input" placeholder="Search...here"  style="padding: 8px; border: 1px solid #ccc; border-radius: 40px; margin-right: 5px; width: 200px;">
+                    <button type="submit" class="search-button" style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 40px; background-color: #f0f0f0; cursor: pointer;" onclick="buttonClick(this)"><i class="fas fa-search"></i></button>  
+                </div>
+            </form>           
+            <div class="create">
+                <label class="btn btn-primary" for="create-post"><a href="{% url 'core:logout' %}" style="text-decoration: none; color:aliceblue ">Logout</a></label>
+                {% block dp %}
+    
+                {% endblock %}
+    
+            </div>
+        </div>
+    </nav>
+    <div class="preference-container">
+        <h1>Select Your Preferences</h1>
+        <form method = "post" action = "{% url 'core:preference' %}">
+            {% csrf_token %}
+            
+             <div class="preference-group">
+                <label>
+                    <input type="checkbox" name="preferences" value="Beaches">
+                    Beaches
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Mountains">
+                    Mountains
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Temples">
+                    Temples
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Nature">
+                    Nature
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Zoo and Aquarium">
+                    Zoo and Aquarium
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Amusement Park">
+                    Amusement Park
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Shopping Districts">
+                    Shopping Districts
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Parks and Gardens">
+                    Parks and Gardens
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Landmarks and Monuments">
+                    Landmarks and Monuments
+                </label>
+                <label>
+                    <input type="checkbox" name="preferences" value="Wine and Food Tour">
+                    Wine and Food Tour
+                </label>
+            </div> 
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -47,7 +47,7 @@
                         <span><i class="uil uil-envelope"></i></span><h3>Messages</h3>
                     </a>
                     
-                    <a class="menu-item" id="messages-notification">
+                    <a class="menu-item" id="messages-notification" href="/explore">
                         <span><i class="uil uil-compass"></i></span><h3>Explore</h3>
                     </a>
                     <a class="menu-item" id="messages-notification" href="{% url 'core:settings' %}">
@@ -149,57 +149,85 @@
                              
                 <div class="requests">
                     {% if user_groups %}
-                    <h4>Groups</h4>
-                    <!------request 1 --------->
-                    {% for user_group in user_groups %}
-                    <a href="/group_detail/{{user_group.id}}">
+                        <h4>Groups</h4>
+                        <!------request 1 --------->
+                        {% for user_group in user_groups %}
+                        <a href="/group_detail/{{user_group.id}}">
+                            <div class="request">
+                                <div class="info">
+                                    {% if group.group_image %}
+                                    <div class="dp">
+                                        <img src="{{group.group_image.url}}">
+                                    </div>
+                                    {% else %}
+                                    <div class="dp">
+                                        <img src="/media/defaultImage.png">
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <h5>{{user_group.name}}</h5>
+                                        <p class="text-muted">
+                                            {{user_group.travel_location}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="action">
+                                    {% comment %} <button class="btn btn-primary">
+                                        Accept
+                                    </button>
+                                    <button class="btn">
+                                        Decline
+                                    </button>  {% endcomment %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                        {% else %}
                         <div class="request">
                             <div class="info">
-                                <div class="dp">
-                                    <img src="user_group.group_image.url">
-                                </div>
-                                <div>
-                                    <h5>{{user_group.name}}</h5>
-                                    <p class="text-muted">
-                                        {{user_group.travel_location}}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="action">
-                                {% comment %} <button class="btn btn-primary">
-                                    Accept
-                                </button>
-                                <button class="btn">
-                                    Decline
-                                </button>  {% endcomment %}
-                            </div>
-                        </div>
-                    </a>
-                    {% endfor %}
-                    <h4>Your Groups</h4>
-                    <!------request 1 --------->
-                    {% for group in user_created_groups %}
-                    <a href="/group_detail/{{group.id}}">
-                        <div class="request">
-                            <div class="info">
-                                <div class="dp">
-                                    <img src="{{group.group_image.url}}">
-                                </div>
-                                <div>
-                                    <h5>{{group.name}}</h5>
-                                    <p class="text-muted">
-                                        {{group.travel_location}}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="action">
                                 
+                                <div>
+                                    <h5>No groups to show..</h5>
+                                    <p class="text-muted">
+                                        You are not a member of any group. 
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    {% endfor %}
-                    <!-----request 2-------->
-                    {% else %}
+                            <div class="action">   
+                            </div>
+                        </div> 
+                    {% endif %}
+                    {% if user_created_groups %}
+                        <h4>Your Groups</h4>
+                        <!------request 1 --------->
+                        {% for group in user_created_groups %}
+                            <a href="/group_detail/{{group.id}}">
+                                <div class="request">
+                                    <div class="info">
+                                        {% if group.group_image %}
+                                            <div class="dp">
+                                                <img src="{{group.group_image.url}}">
+                                            </div>
+                                        {% else %}
+                                            <div class="dp">
+                                                <img src="/media/defaultImage.png">
+                                            </div>
+                                        {% endif %}
+
+                                        <div>
+                                            <h5>{{group.name}}</h5>
+                                            <p class="text-muted">
+                                                {{group.travel_location}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="action">
+                                        
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                        {% else %}
                     <div class="request">
                         <div class="info">
                             
@@ -214,6 +242,9 @@
                         </div>
                     </div> 
                     {% endif %}
+                    <!-----request 2-------->
+                    
+                    
                 </div>
                 <label for="create-post" class="btn btn-primary"><a href = "{% url 'core:create_group' %}" style = "color:white">Create Group</a></label>
             </div>

@@ -10,7 +10,8 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
 from itertools import chain
-from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment, Room, Message
+from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment, Room, Message, Preference, PreferenceOption
+from .forms import PreferenceForm
 from django.contrib.auth import authenticate, login
 import random
 import time 
@@ -49,6 +50,8 @@ def index(request):
 
     for users in user_following:
         user_following_list.append(users.user)
+
+    print(user_following_list)
 
     for usernames in user_following_list:
         feed_lists = Post.objects.filter(user = usernames)
@@ -291,8 +294,9 @@ def create_post(request):
         caption = request.POST['caption']
         tag = request.POST['hashtag']
         location = request.POST['location']
+        category = request.POST['category']
         print(location)
-        post = Post.objects.create(user=user, caption=caption, tag=tag, user_profile = user_profile, post_location = location)
+        post = Post.objects.create(user=user, caption=caption, tag=tag, user_profile = user_profile, post_location = location, category = category)
 
         # Handle multiple image uploads
         for image_file in request.FILES.getlist('image'):
@@ -320,13 +324,15 @@ def create_group(request):
         group_name = request.POST['group_name']
         location = request.POST['location']
         description = request.POST['description']
+        category = request.POST['category']
         image = request.FILES.get('group-image')
 
         group = TravelGroup.objects.create(name=group_name, 
                                            description=description, 
                                            creator=request.user, group_image = 
                                            image, 
-                                           travel_location = location)
+                                           travel_location = location,
+                                           category = category)
         print(group)
         return redirect('core:group_detail', group_id=group.id)
     else:
@@ -443,6 +449,68 @@ def search_users_for_group(request, group_id):
     return render(request, 'groupView.html', context)
 
 @login_required(login_url='core:signinSignup')
+def explore(request):
+
+    user_following_list = []
+    user_profile = Profile.objects.get(user = request.user)
+    print(user_profile)
+    print("EXPLORE PAGE")
+    if user_profile.is_preference_given == False:
+        print("False")
+        return render(request, 'preference.html')
+        
+    else:
+        preferences = Preference.objects.get(user_profile = user_profile)
+        preference_names = preferences.preferences.values_list('name', flat = True)
+        print("NAKULPREFERENCES", preference_names)
+
+        user_following = FollowersCount.objects.filter(follower = request.user.username)
+
+        for users in user_following:
+            user_following_list.append(users.user)
+
+        user_following_list.append(request.user.username)
+
+        suggested_posts = Post.objects.filter(category__in=preference_names).exclude(user__in = user_following_list)
+        user_groups = TravelGroup.objects.filter(participants=request.user)
+        suggested_groups = TravelGroup.objects.filter(category__in=preference_names).exclude(pk__in=user_groups)
+
+        return render(request, "explore_page.html",{'suggested_posts':suggested_posts, 'suggested_groups':suggested_groups})
+
+def preference(request):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        preference, created = Preference.objects.get_or_create(user_profile=profile)
+        
+        # Clear existing preferences
+        preference.preferences.clear()
+        
+        # Fetch selected preferences from the form
+        selected_preferences = request.POST.getlist('preferences')
+        print("HELLO", selected_preferences)
+        
+        # Add the selected preferences to the Preference object
+        for pref_name in selected_preferences:
+            try:
+                option, created = PreferenceOption.objects.get_or_create(name=pref_name)
+            except :
+                option = PreferenceOption.objects.get(name=pref_name)
+            preference.preferences.add(option)
+        
+        # Mark the preferences as given
+        profile.is_preference_given = True
+        profile.save()
+        preference.save()
+
+        # Redirect to a success page or another view
+        return redirect('core:index')
+
+    # If the request method is GET, render the template with an empty form
+    return render(request, 'preference.html')
+
+    
+
+@login_required(login_url='core:signinSignup')
 def add_participant(request, group_id, user_id):
     group = TravelGroup.objects.get(id=group_id)
     user = User.objects.get(id=user_id)
@@ -492,6 +560,18 @@ def follower_list(request):
     followers = FollowersCount.objects.filter(user = user_name)
     
     return render(request, 'follower_list.html', {'followers':followers})
+
+def following_list(request):
+    user_following_list = []
+    user_name = request.GET.get('user_name')
+    user_following = FollowersCount.objects.filter(follower = request.user.username)
+
+    for users in user_following:
+        user_following_list.append(users.user)
+    print("FOLLOWINGLIST = ", user_following_list)
+
+    return render(request, 'following_list.html', {'following':user_following_list})
+
 
 @login_required(login_url='core:signinSignup')
 def chat(request):

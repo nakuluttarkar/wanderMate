@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %} 
+
+{% block dp %}
+<div class="dp">
+    <a href="/profile/{{user.username}}">
+        {% if user_profile.profile_img %}
+        <img src="{{user_profile.profile_img.url}}" alt="">
+        {% else %}
+        <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+        {% endif %}
+    </a>
+ </div>
+ {% endblock %}
+
+
+
+{% block content %}
+    <main>
+        <div class="container">
+
+            <!--*****************LEFT*****************-->
+            
+            <div class="left">
+                <div class="left-user-card" style = "margin-bottom:-40px ;">
+                    <a class="profile" href = "/profile/{{user.username}}">
+                        <div class="dp">
+                            {% if user_profile.profile_img %}
+                            <img src="{{user_profile.profile_img.url}}" alt="">
+                            {% else %}
+                            <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="handle">
+                            {% if user.is_authenticated %}
+                            <h4>{{user.username}}</h4>
+                            {% endif %}
+                            <!-- <p class="text-muted"> @rsjain
+                            </p> -->
+                        </div>
+                    </a>
+                </div>
+                <!--SIDEBAR-->
+                <div class="left-user-card" style = "margin-bottom:-40px ;">
+                    <a class="profile" href = "/profile/{{user.username}}">
+                        <div class="dp">
+                            {% if user_profile.profile_img %}
+                            <img src="{{user_profile.profile_img.url}}" alt="">
+                            {% else %}
+                            <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="handle">
+                            {% if user.is_authenticated %}
+                            <h4>{{user.username}}</h4>
+                            {% endif %}
+                            <!-- <p class="text-muted"> @rsjain
+                            </p> -->
+                        </div>
+                    </a>
+                </div>
+            </div>
+           <!--*****************************MIDDLE********************************-->
+            <div class="middle">
+                
+                <!-------FEEDS--------->
+                <div class="feeds">
+                    <!--FEED !-->
+                    {% if suggested_posts %}
+                    {% for post in suggested_posts %}
+                    
+                    <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="dp">
+                                    <a href = "{% url 'core:profile' post.user %}"><img src="{{ post.user_profile.profile_img.url }}"></a>
+                                </div>
+                                <div class="info">
+                                    <h3>{{post.user}}</h3>
+                                    {% if post.post_location %}
+                                    <small>{{post.post_location}}, {{post.created_at}}</small>
+                                    {% else %}
+                                    <small>{{post.created_at}}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% for image in post.images.all %}
+                        <div class="photo" style="align-items:center">
+                            <img src="{{ image.image.url }}" >
+                        </div> 
+                        {% endfor %}
+                        <div class="action-button">
+                            <div class="interaction-buttons">
+                            
+                                <span>
+                                    <a class="like-button{% if user_has_liked_post %} liked{% endif %}" href="#" data-post-id="{{ post.id }}">
+                                        <i class="uil-heart{% if user_has_liked_post %} liked{% endif %}"></i>
+                                    </a>
+                                </span>
+                                
+                                <span><a href="#" class="view-comments" data-post-id="{{ post.id }}"><i class="uil-comment-dots"></i></a></span>
+                            </div>                         
+                        </div>
+
+                        <div class="liked-by" id="like-count-{{ post.id }}">
+            
+                            {% if post.no_of_likes == 0 %}
+                            <p>No likes</p>
+                            {% elif post.no_of_likes == 1 %}
+                            <p>Liked by 1 person</p>
+                            {% else %}
+                            <p>Liked by {{post.no_of_likes}} people </p>
+                            {% endif %}
+
+                        </div>
+                        <div class="caption">
+                            <p><b>{{post.user}}</b> {{post.caption}} <span class="hashtag">#{{post.tag}}</span></p>
+                        </div>
+                        
+                        <form method="post" id="add-comment">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{post.id}}">
+                            <input type="text" id="comment-text" class="comment-value" name="comment" placeholder="Add comment..." style="border-radius:20px; margin-top:3px; width:65%; display:inline-block;">
+                            <button type="submit" style="border-radius:20px;background-color:#176B87; display:inline-block;">Submit Comment</button>
+                        </form>
+                        
+                        
+                        {% comment %} <div class="text-muted">
+                            <a href="#" class="view-comments" data-post-id="{{ post.id }}">View all 10 comments</a>
+                        </div> {% endcomment %}
+                        
+                        <div id="popup-box" class="modal">
+                            <div class="popup-content">
+                                <h1 style="margin-right:10px">Comments</h1>
+                                <div id="comments-container" class="comments-container">
+                                    <!-- Comments will be loaded here dynamically -->
+                                </div>
+                                <a href="#" class="close-modal">&times;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                    {% else %}
+                    <h3> NO posts for the preference </h3>
+                    {% endif %}
+
+                    <!--end of feed1-->
+
+                </div>
+            </div> 
+            <!-------End of feed------------->
+            <!-----------------------RIGHT-------------->
+            <div class="right">
+                             
+                <div class="requests">
+                    {% if suggested_groups %}
+                    <h4>Suggested Groups</h4>
+                    <!------request 1 --------->
+                    {% for group in suggested_groups %}
+                    <a href="/group_detail/{{group.id}}">
+                        <div class="request">
+                            <div class="info">
+                                <div class="dp">
+                                    <img src="{{group.group_image.url}}">
+                                </div>
+                                <div>
+                                    <h5>{{group.name}}</h5>
+                                    <p class="text-muted">
+                                        {{group.travel_location}}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="action">
+                                {% comment %} <button class="btn btn-primary">
+                                    Accept
+                                </button>
+                                <button class="btn">
+                                    Decline
+                                </button>  {% endcomment %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    
+                    <!------request 1 --------->
+                    
+                    
+                    <!-----request 2-------->
+                    {% else %}
+                    <div class="request">
+                        <div class="info">
+                            
+                            <div>
+                                <h5>No groups to show..</h5>
+                                <p class="text-muted">
+                                    You are not a member of any group. 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="action">   
+                        </div>
+                    </div> 
+                    {% endif %}
+                </div>
+                {% comment %} <label for="create-post" class="btn btn-primary"><a href = "{% url 'core:create_group' %}" style = "color:white">Create Group</a></label> {% endcomment %}
+            </div>
+    </main>
+    
+
+    {% endblock %}

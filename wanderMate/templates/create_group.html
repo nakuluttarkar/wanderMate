@@ -36,8 +36,19 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
         textarea {
             height: 100px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
         button {
             padding: 10px 20px;
@@ -58,17 +69,29 @@
         <h2>Create Group</h2>
         <form method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
-            <label for = "group-image">Image:</label>
+            <label for="group-image">Image:</label>
             <input type="file" id="image" name="group-image">
-            <br><br>
             <label for="group_name">Group Name:</label>
             <input type="text" id="group_name" name="group_name" required>
-            <label for="group_name">Location</label>
-            <input type="text" id="group_name" name="location" required>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4" required></textarea>
+            <label class="create-post-label" for="category">Category:</label>
+            <select class="create-post-select" id="category" name="category" required>
+                <option value="" disabled selected>--Choose from below--</option>
+                <option value="Beaches">Beaches</option>
+                <option value="Mountains">Mountains</option>
+                <option value="Nature">Nature</option>
+                <option value="Zoo and Aquarium">Zoo and Aquarium</option>
+                <option value="Amusement Park">Amusement Park</option>
+                <option value="Shopping Districts">Shopping Districts</option>
+                <option value="Parks and Gardens">Parks and Gardens</option>
+                <option value="Landmarks and Monuments">Landmarks and Monuments</option>
+                <option value="Wine and Food Tour">Wine and Food Tour</option>
+            </select>
             <button type="submit">Create Group</button>
         </form>
-    </div>  
+    </div>
 </body>
 </html>

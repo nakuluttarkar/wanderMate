@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100;300;400&display=swap');
+
+body {
+    font-family: 'Playpen Sans', cursive;
+    background-color: #eaeaea;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+nav {
+    width: 100%;
+    background: var(--color-white);
+    padding: 0.7rem 0;
+    position: fixed;
+    top: 0;
+    z-index: 10;    
+}
+    
+nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    
+.searchbar {
+    background: var(--color-light);
+    border-radius: var(--border-radius);
+    padding: var(search padding)
+}
+
+.searchbar input[type="search"]{
+    background: transparent;
+    width: 30vw;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-dark);
+}
+
+.searchbar input[type="search"]::placeholder {  
+    color: var(--color-gray);
+}
+    
+nav .create{
+    display:flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.preference-container {
+    width: 90%;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #176B87;
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.preference-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+label:hover {
+    background-color: #eaeaea;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: #176B87; /* Change the checkbox color */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #176B87;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #064a45;
+}

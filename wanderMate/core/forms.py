@@ -1,9 +1,13 @@
 from django import forms
-from .models import Post
+from .models import Preference, PreferenceOption
 
-class PostForm(forms.ModelForm):
+class PreferenceForm(forms.ModelForm):
+    preferences = forms.ModelMultipleChoiceField(
+        queryset=PreferenceOption.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+
     class Meta:
-        model = Post
-        fields = ['caption', 'tags', 'images']
-
-    images = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+        model = Preference
+        fields = ['preferences']
