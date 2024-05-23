@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Names</title>
+    <link rel="stylesheet" href="{% static 'css/following.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            
+            <h3>List of Names</h3>
+        </div>
+        <div class="names-list">
+            <ul>
+                {% for user_profile in user_profile_list %}
+                    <a href="/profile/{{user_profile.user.username}}">
+                        <li class="name-item">
+                            <div class = "dp">
+                                <img src="{{user_profile.profile_img.url}}" alt="Profile Picture">
+                            </div>
+                            <p><span class="name">{{user_profile.user.username}}</span></p><br>
+                            {% comment %} <p> {{user_profile.fname}}{{user_profile.lname}}</p> {% endcomment %}
+                        </li>
+                    </a>
+                {% endfor %}
+                
+                <!-- Add more names here -->
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

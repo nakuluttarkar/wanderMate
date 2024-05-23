@@ -1,23 +1,69 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #eaeaea;
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100;300;400&display=swap');
+
+.chat-body {
+    font-family: 'Playpen Sans', cursive;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 50vh;
+}
+.chat-body.modal-open {
+    filter: blur(5px);
+}
+
+nav {
+    width: 100%;
+    background: var(--color-white);
+    padding: 0.7rem 0;
+    position: fixed;
+    top: 0;
+    z-index: 10;    
+}
+    
+nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    
+.searchbar {
+    background: var(--color-light);
+    border-radius: var(--border-radius);
+    padding: var(search padding)
+}
+
+.searchbar input[type="search"]{
+    background: transparent;
+    width: 30vw;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-dark);
+}
+
+.searchbar input[type="search"]::placeholder {  
+    color: var(--color-gray);
+}
+    
+nav .create{
+    display:flex;
+    align-items: center;
+    gap: 2rem;
 }
 
 .chat-room {
     width: 90%;
     max-width: 600px;
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color: red;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height:60%;
 }
 
 .back-to-home {

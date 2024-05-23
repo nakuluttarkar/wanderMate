@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
 from itertools import chain
+from django.db.models import Q
 from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment, Room, Message, Preference, PreferenceOption
 from .forms import PreferenceForm
 from django.contrib.auth import authenticate, login
@@ -451,6 +452,7 @@ def search_users_for_group(request, group_id):
 @login_required(login_url='core:signinSignup')
 def explore(request):
 
+    user_suggest_profile_list =[]
     user_following_list = []
     user_profile = Profile.objects.get(user = request.user)
     print(user_profile)
@@ -475,7 +477,28 @@ def explore(request):
         user_groups = TravelGroup.objects.filter(participants=request.user)
         suggested_groups = TravelGroup.objects.filter(category__in=preference_names).exclude(pk__in=user_groups)
 
-        return render(request, "explore_page.html",{'suggested_posts':suggested_posts, 'suggested_groups':suggested_groups})
+        suggested_users_from_posts = Profile.objects.filter(user__username__in=suggested_posts.values_list('user', flat=True))
+    #     print("SUGGESTEDUSERFORMPOST", suggested_users_from_posts)
+    #     user_suggest_profile_list.append(suggested_users_from_posts)
+        suggested_users_from_groups = Profile.objects.filter(user__username__in=suggested_groups.values_list('creator__username', flat=True))
+    #     print("SUGGESTEDUSERFORMGROUP", suggested_users_from_groups)
+    #     user_suggest_profile_list.append(suggested_users_from_groups)
+    # # Collect participants of suggested groups
+        group_participants = Profile.objects.filter(user__joined_groups__in=suggested_groups).distinct()
+    #     print("GROUPPARTICIPANTS", group_participants)
+    #     user_suggest_profile_list.append(group_participants)
+    #     print(user_suggest_profile_list)
+    # # Combine all suggested users and exclude already followed users
+    #     all_suggested_users = suggested_users_from_posts.union(suggested_users_from_groups, group_participants)
+    #     all_suggested_users = all_suggested_users.exclude(user__username__in=user_following_list)
+        combined_user_set = list(chain(suggested_users_from_posts, suggested_users_from_groups, group_participants))
+        unique_profiles_set = set(combined_user_set)
+        print("UNIQUE",unique_profiles_set)
+
+        
+
+
+        return render(request, "explore_page.html",{'suggested_posts':suggested_posts, 'suggested_groups':suggested_groups, 'suggested_users':unique_profiles_set})
 
 def preference(request):
     if request.method == 'POST':
@@ -556,21 +579,41 @@ def leave_group(request, group_id):
 def follower_list(request):
     # user = request.user 
     # print(user)
+    user_follower_list = []
+    user_profile_list = []
     user_name =  request.GET.get('user_name')
     followers = FollowersCount.objects.filter(user = user_name)
+
+    for users in followers:
+        user_follower_list.append(users.follower)
+
+    for user in user_follower_list:
+        user_object = User.objects.get(username = user)
+        user_profile = Profile.objects.get(user = user_object)
+        user_profile_list.append(user_profile) 
     
-    return render(request, 'follower_list.html', {'followers':followers})
+    print("FOLLOWERUSERPROFILE = ", user_profile_list)
+    
+    return render(request, 'followers.html', {'followers':followers, 'user_profile_list': user_profile_list})
 
 def following_list(request):
     user_following_list = []
+    user_profile_list = []
     user_name = request.GET.get('user_name')
     user_following = FollowersCount.objects.filter(follower = request.user.username)
 
     for users in user_following:
         user_following_list.append(users.user)
+
+    for users in user_following_list:
+        user_object = User.objects.get(username = users)
+        user_profile = Profile.objects.get(user = user_object)
+        user_profile_list.append(user_profile) 
+    print("FOLLOWERUSERPROFILE = ", user_profile_list)
+
     print("FOLLOWINGLIST = ", user_following_list)
 
-    return render(request, 'following_list.html', {'following':user_following_list})
+    return render(request, 'following.html', {'following':user_following_list, 'user_profile_list': user_profile_list})
 
 
 @login_required(login_url='core:signinSignup')

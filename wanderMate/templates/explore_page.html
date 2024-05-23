@@ -22,43 +22,29 @@
             <!--*****************LEFT*****************-->
             
             <div class="left">
+                <h4 style = "margin-top:20px; margin-bottom:-40px">Suggested users</h4>
+                {% for user in suggested_users %}
                 <div class="left-user-card" style = "margin-bottom:-40px ;">
-                    <a class="profile" href = "/profile/{{user.username}}">
+                    <a class="profile" href = "/profile/{{user.user.username}}">
                         <div class="dp">
-                            {% if user_profile.profile_img %}
-                            <img src="{{user_profile.profile_img.url}}" alt="">
+                            {% if user.profile_img %}
+                            <img src="{{user.profile_img.url}}" alt="">
                             {% else %}
                             <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
                             {% endif %}
                         </div>
                         <div class="handle">
-                            {% if user.is_authenticated %}
-                            <h4>{{user.username}}</h4>
-                            {% endif %}
+                            
+                            <h4>{{user.user.username}}</h4>
+                            
                             <!-- <p class="text-muted"> @rsjain
                             </p> -->
                         </div>
                     </a>
                 </div>
-                <!--SIDEBAR-->
-                <div class="left-user-card" style = "margin-bottom:-40px ;">
-                    <a class="profile" href = "/profile/{{user.username}}">
-                        <div class="dp">
-                            {% if user_profile.profile_img %}
-                            <img src="{{user_profile.profile_img.url}}" alt="">
-                            {% else %}
-                            <img src="{% static 'image/defaultProfileImg.jpeg' %}" alt="">
-                            {% endif %}
-                        </div>
-                        <div class="handle">
-                            {% if user.is_authenticated %}
-                            <h4>{{user.username}}</h4>
-                            {% endif %}
-                            <!-- <p class="text-muted"> @rsjain
-                            </p> -->
-                        </div>
-                    </a>
-                </div>
+                {% endfor %}
+                
+                
             </div>
            <!--*****************************MIDDLE********************************-->
             <div class="middle">
