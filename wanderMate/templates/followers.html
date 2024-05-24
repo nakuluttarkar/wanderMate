@@ -16,7 +16,7 @@
         <div class="names-list">
             <ul>
                 {% for user_profile in user_profile_list %}
-                    <a href="/profile/{{user_profile.user.username}}">
+                    <a href="/profile/{{user_profile.user.username}}" style="color:black; text-decoration:none">
                         <li class="name-item">
                             <div class = "dp">
                                 <img src="{{user_profile.profile_img.url}}" alt="Profile Picture">

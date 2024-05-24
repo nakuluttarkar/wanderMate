@@ -22,7 +22,7 @@
             <!--*****************LEFT*****************-->
             
             <div class="left">
-                <a class="profile" href = "/profile/{{user.username}}">
+                <a class="profile" href = "/profile/{{user.username}}" style="color:black">
                     <div class="dp">
                         {% if user_profile.profile_img %}
                         <img src="{{user_profile.profile_img.url}}" alt="">
@@ -40,17 +40,17 @@
                 </a>
                 <!--SIDEBAR-->
                 <div class="sidebar">
-                    <a class="menu-item active">
+                    <a class="menu-item active" style="color:black">
                         <span><i class="uil uil-home"></i></span><h3>Home</h3>
                     </a>
-                    <a class="menu-item" href = "/chat">
+                    <a class="menu-item" href = "/chat" style="color:black">
                         <span><i class="uil uil-envelope"></i></span><h3>Messages</h3>
                     </a>
                     
-                    <a class="menu-item" id="messages-notification" href="/explore">
+                    <a class="menu-item" id="messages-notification" href="/explore" style="color:black">
                         <span><i class="uil uil-compass"></i></span><h3>Explore</h3>
                     </a>
-                    <a class="menu-item" id="messages-notification" href="{% url 'core:settings' %}">
+                    <a class="menu-item" id="messages-notification" href="{% url 'core:settings' %}" style="color:black">
                         <span><i class="uil uil-setting"></i></span><h3>Edit Profile</h3>
                     </a>
                     <!--CREATE POST BUTTON-->
@@ -152,7 +152,7 @@
                         <h4>Groups</h4>
                         <!------request 1 --------->
                         {% for user_group in user_groups %}
-                        <a href="/group_detail/{{user_group.id}}">
+                        <a href="/group_detail/{{user_group.id}}" style="color:black">
                             <div class="request">
                                 <div class="info">
                                     {% if user_group.group_image %}
