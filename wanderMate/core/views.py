@@ -79,9 +79,9 @@ def index(request):
                                          'user_created_groups': user_created_groups})
 
 # settings page (Profile editing)
-@login_required(login_url='core:signinSignup')
-def settings(request):
-    return render(request, "settings.html")
+# @login_required(login_url='core:signinSignup')
+# def settings(request):
+#     return render(request, "settings.html")
 
 
 def verify_otp(request):
@@ -98,12 +98,10 @@ def verify_otp(request):
                 
                 user_profile.otp_validated = True
                 user_profile.save()
-                # OTP is correct and valid
-                # You can now perform further actions, such as activating the user account
                 messages.success(request, 'OTP verified successfully.')
-                request.session.pop('otp')  # Remove the OTP from the session
-                request.session.pop('otp_generated_time')  # Remove the OTP generation time from the session
-                return redirect('core:index')  # Redirect to a success page
+                request.session.pop('otp')  
+                request.session.pop('otp_generated_time')  
+                return redirect('core:index')  
             except Profile.DoesNotExist:
                 messages.error(request, 'User profile not found')
         else:
@@ -111,6 +109,42 @@ def verify_otp(request):
             messages.error(request, 'Invalid OTP. Please try again.')
 
     return render(request, 'verify_otp.html')
+
+def verify_otp_for_forgot_password(request, username):
+    if request.method == 'POST':
+        otp_entered = request.POST.get('otp')
+        otp_generated = request.session.get('otp')
+        otp_generated_time = request.session.get('otp_generated_time')
+
+        if otp_entered and otp_generated and otp_generated_time and otp_entered == otp_generated and is_valid_otp(otp_generated_time):
+
+            try:
+                print(request.user)
+            
+                messages.success(request, 'OTP verified successfully.')
+                request.session.pop('otp')  
+                request.session.pop('otp_generated_time')  
+                return redirect('core:change_password',username)  
+            except Profile.DoesNotExist:
+                messages.error(request, 'User profile not found')
+        else:
+            # OTP is incorrect or expired
+            messages.error(request, 'Invalid OTP. Please try again.')
+            
+
+    return render(request, 'verify_otp_for_forgot_password.html')
+
+def update_contact_info(request):
+    user = request.user
+    
+    if request.method == 'POST':
+        email = request.POST['email']
+        user.email = email
+        user.save()
+        messages.success(request, "email reset successful")
+        return redirect('core:signinSignup')
+    
+    return render(request, "update_contact_info.html")
 
 
 def searchForuser(username):
@@ -174,27 +208,22 @@ def signin_signup(request):
                 else:
                     user = User.objects.create_user(username = username, email = email, password = password)
                     user.save()
-
-
                     # creating a profile object for the new user
                     user_model = User.objects.get(username = username)
                     new_profile = Profile.objects.create(user = user_model, id_user = user_model.id)
-                    new_profile.save()
-                    
-
-                    #OTP validation 
+                    new_profile.save() 
                     
             else:
                 messages.info(request, 'Password not matching')
                 # return redirect('signinSignup')
             
         elif 'signin' in request.POST :
-
-            
+  
             username = request.POST['username1']
             password= request.POST['password1']
-            
+            print("LOGIN: USERNAME", username, "PASSWORD", password)
             user = auth.authenticate(username=username, password=password)
+            print("USER",user)
             if user is not None:
                 
                 auth.login(request, user)
@@ -229,6 +258,50 @@ def signin_signup(request):
 
     return render(request, 'signinSignup.html')
 
+def forgot_password(request):
+    print("FORGOTPASSWORD")
+    if request.method == 'POST':
+        print("FORGOTPASSWORD1")
+        username = request.POST['username']
+        try:
+            user = User.objects.get(username = username)
+            email = user.email
+            otp = generate_otp()
+            send_otp_email(email,otp)
+            request.session['otp'] = otp
+            request.session['otp_generated_time'] = time.time()
+            return redirect('core:verify_otp_for_forgot_password', username)
+        except:
+            print("Username not found")
+            messages.error(request,"User Not Found")
+        # user_profile = Profile.objects.get(user = user)
+        
+
+    return render(request, "forgot_password.html")
+
+def change_password(request, username):
+
+    user = User.objects.get(username = username)
+    print(username,"USERNAME")
+     
+
+    if request.method == 'POST':
+        password = request.POST['password']
+        password1 = request.POST['confirm_password']
+
+        if(password == password1):
+            user.set_password(password)
+            user.save()
+            #update password view
+            print("PASSWORD",user.password)
+            messages.success(request, 'Password changed successfully')
+            return redirect('core:password_rest_success')
+        else:
+            messages.error(request,"Password don't match")
+    return render(request, "change_password.html")
+
+def password_rest_success(request):
+    return render(request, "success_page.html")
 # settings view
 
 @login_required(login_url='core:signinSignup')

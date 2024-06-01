@@ -58,18 +58,9 @@
 </head>
 <body>
     <div class="container">
-        <h2>Enter OTP</h2>
-        <p>OTP has been sent to your email address</p>
-        <a href = "{% url 'core:update_contact_info' %}"><p>Click here to update contact info</p></a>
-        <form action="" method="post">
-            {% csrf_token %}
-            <input type="text" name="otp" placeholder="Enter OTP">
-            <br>
-            <input type="submit" value="Verify OTP">
-            {% for message in messages %}
-            <div class="error-message">{{ message }}</div>
-            {% endfor %}
-        </form>
+        <h2>Password Reset Successful</h2>
+        <a href = "{% url 'core:signinSignup' %}"><p>Click here to login</p></a>
+        
     </div>
 </body>
 </html>

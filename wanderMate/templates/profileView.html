@@ -22,19 +22,36 @@
                     {% endif %}
                 </form>
             </div>
-            <div class="follow-info">
-                <a href="/follower_list?user_name={{user_object.username}}" style="margin-right: 20px; text-decoration: none; color: inherit;">
-                    <span>{{user_followers}}</span> Followers
-                </a>
-                <a href="/following_list?username={{user_object.username}}" style="color:black">
-                    <p style="display: inline; margin-right: 20px;">
-                        <span>{{user_following}}</span> Following
+            {% if user_object.username == user.username%}
+                <div class="follow-info">
+                    <a href="/follower_list?user_name={{user_object.username}}" style="margin-right: 20px; text-decoration: none; color: inherit;">
+                        <span>{{user_followers}}</span> Followers
+                    </a>
+                    <a href="/following_list?username={{user_object.username}}" style="color:black">
+                        <p style="display: inline; margin-right: 20px;">
+                            <span>{{user_following}}</span> Following
+                        </p>
+                    </a>
+                    <p style="display: inline;">
+                        <span>{{user_post_length}}</span> Posts
                     </p>
-                </a>
-                <p style="display: inline;">
-                    <span>{{user_post_length}}</span> Posts
-                </p>
-            </div>
+                </div>
+            {% else %}
+                <div class="follow-info">
+                    <a href="/follower_list?user_name={{user_profile.user.username}}" style="margin-right: 20px; text-decoration: none; color: inherit;">
+                        <span>{{user_followers}}</span> Followers
+                    </a>
+                    
+                        <p style="display: inline; margin-right: 20px;">
+                            <span>{{user_following}}</span> Following
+                        </p>
+                    
+                    <p style="display: inline;">
+                        <span>{{user_post_length}}</span> Posts
+                    </p>
+                </div>
+            {% endif %}
+                
             
         </div>
         <div class="middle">
@@ -74,12 +91,14 @@
                     
                           
                 </div>
+                {% if user_object.username == user.username%}
                 <div class="delete-post" style = "margin-bottom:60px">
                 <form method="post" action="{% url 'core:delete_post' post.id %}" onsubmit="return confirm('Are you sure you want to delete this post?');" >
                     {% csrf_token %}
                     <button type="submit" class="btn-delete">Delete Post  <i class="fa fa-trash" aria-hidden="true"></i></button>
                 </form>
                 </div>
+                {% endif %}
 
                 {% endfor %}
                 <!--end of feed1-->

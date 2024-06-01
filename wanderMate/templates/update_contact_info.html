@@ -29,7 +29,7 @@
             margin-bottom: 20px;
         }
         
-        input[type="text"] {
+        input[type="email"] {
             width: 250px;
             padding: 10px;
             margin-bottom: 20px;
@@ -58,14 +58,14 @@
 </head>
 <body>
     <div class="container">
-        <h2>Enter OTP</h2>
-        <p>OTP has been sent to your email address</p>
-        <a href = "{% url 'core:update_contact_info' %}"><p>Click here to update contact info</p></a>
+        <h2>Update Contact Information</h2>
+        <p>Update your email address</p>
+        
         <form action="" method="post">
             {% csrf_token %}
-            <input type="text" name="otp" placeholder="Enter OTP">
+            <label>Enter Updated Email: </label><input type="email" name="email" placeholder="Enter email">
             <br>
-            <input type="submit" value="Verify OTP">
+            <input type="submit" value="Update">
             {% for message in messages %}
             <div class="error-message">{{ message }}</div>
             {% endfor %}
