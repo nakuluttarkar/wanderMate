@@ -1278,3 +1278,78 @@ input[type="text"],
 .index-dp{
     height:400px;
 }
+
+/* Styles for plan-trip page */
+.container-plan-trip{
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container-plan-trip h1 {
+    color: #333;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.container-plan-trip form {
+    background-color: #ffffff;
+    /* background-color: red; */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.container-plan-trip .form-group {
+    margin-bottom: 15px;
+}
+
+.container-plan-trip label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.container-plan-trip input[type="text"],
+.container-plan-trip input[type="number"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.container-plan-trip input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.container-plan-trip .submit-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #176B87;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.container-plan-trip .submit-button:hover {
+    background-color: #135e74;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container-trip {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .container-plan-trip input[type="text"],
+    .container-plan-trip input[type="number"] {
+        width: calc(100% - 16px);
+    }
+}

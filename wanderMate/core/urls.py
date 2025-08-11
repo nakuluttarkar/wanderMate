@@ -10,16 +10,19 @@ urlpatterns = [
     path('',views.index, name="index"),
     path('logout/', views.logout, name = "logout"),
     path('settings/',views.settings, name = "settings"),
+    
     path('signin_signup/', views.signin_signup, name = "signinSignup"),
     path('forgot-password/', views.forgot_password, name="forgot_password"),
     path('like-post/',views.like_post, name = 'like-post'),
     path('add_comment/', views.add_comment, name='add_comment'),
+    path('follow/', views.follow, name='follow'),
     path('view_comments/', views.view_comments, name="view_comments"),
-    path('follow',views.follow, name="follow"),
     path('follower_list/', views.follower_list, name = "follower_list"),
     path('following_list/', views.following_list, name = "following_list"),
     path('search',views.search, name="search"),
     path('explore/', views.explore, name = "explore"),
+    path('plan-trip/', views.planTrip, name="plan-trip"),
+    path('packages/', views.packages, name="packages"),
     path('preference/', views.preference, name="preference"),
     path('search_users_for_group/<int:group_id>', views.search_users_for_group, name='search_users_for_group'),
     path('add_participant/<int:group_id>/<int:user_id>/', views.add_participant, name='add_participant'),
@@ -42,7 +45,8 @@ urlpatterns = [
     path('<str:room>/', views.chat_room, name = "chat_room"),
     path('individual_chat_room/<str:room>/<str:follower>/<str:username>/', views.individual_chat_room, name='individual_chat_room'), 
     path('send', views.send, name="send"),
-    path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
+    path('getMessages/<str:room>/', views.getMessages, name='getMessages')
+    
     
 
 ]

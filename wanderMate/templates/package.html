@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Packages</title>
+    <style>
+        body {
+            font-family: 'Playpen Sans', cursive;
+            background-color: #e0eafc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .package-dropdown {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .package-dropdown:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-button {
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #f4f4f4;
+            color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 18px;
+            position: relative;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .dropdown-button:hover {
+            background-color: #e0eafc;
+            transform: scale(1.02);
+        }
+
+        .dropdown-button::after {
+            content: '▼';
+            font-size: 12px;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-button.active::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .package-content {
+            max-height: 0;
+            overflow-y: auto;
+            padding: 0 20px;
+            border-top: 1px solid #ddd;
+            background-color: #f9f9f9;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+
+        .package-content.show {
+            max-height: 1000px; /* High max-height to ensure the full content is visible */
+            padding: 20px;
+        }
+
+        .package-content p {
+            margin: 0;
+            padding: 5px 0;
+            color: #555;
+        }
+
+        .package-content h2 {
+            color: #007bff;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .package-content ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .package-content li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Travel Packages</h1>
+
+        <div class="nav-buttons">
+            <a href="/" class="btn-back"><i class="fas fa-home"></i></a>
+            <button onclick="window.history.back()">Back</button>
+        </div>
+
+        <!-- Package 1 -->
+        
+        
+            
+                <div class="package-dropdown">
+                    {% if response_generated %}
+                        {% for package in aiResponse.packages %}
+                            <button class="dropdown-button" onclick="toggleContent('{{package.id}}')">{{ package.name }}</button>
+                            <div id="{{package.id}}" class="package-content">
+                                <h2>{{package.name}} ({{package.days|length}} days, {{package.cost}} Budget)</h2>
+                                <h4>Itinerary: </h4>
+                                {% for day in package.days %}
+                                    <p><strong>Day {{day.day}}: {{day.description}}</strong></p>
+                                <ul>
+                                    
+                                    {% for item in day.itinerary %}
+                                        <li>{{item}}</li>
+                                    {% endfor %}
+                                    
+                                </ul>
+                                    <p><strong>Transportation: </strong></p>
+                                <ol>
+                                    
+                                    {% for item in day.transport %}
+                                        <li>
+                                            <ul>
+                                                <li><b>Mode of Transport:</b> {{item.mode_of_transport}}</li>
+                                                <li><b>From: </b>{{item.start_location}}</li>
+                                                <li><b>To: </b>{{item.end_location}}</li>
+                                                <li><b>Estimated Price: </b>{{item.estimated_price}}</li>
+                                                <li><b>Estimated Time:</b> {{item.estimated_time}}</li>
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                    
+                                </ol>
+                                <p><b>Hotel: </b>{{day.hotel}}</p>
+                                <p><b>Restaurants</b></p>
+                                <ul>
+                                    
+                                    {% if day.restaurants %}
+                                        {% for item in day.restaurants %}
+                                            <li>{{item}}</li>
+                                        {% endfor %}
+                                    {% else %}
+                                            <li>None</li>
+                                    {% endif %}
+                                    
+                                </ul>
+
+                                {% endfor %}
+                                <h4>Price Breakdown: </h4>
+                                <ul>
+                                    <li>Hotel Cost: {{package.price_breakdown.hotel_cost}}</li>
+                                    <li>Travel Cost: {{package.price_breakdown.travel_cost}}</li>
+                                    <li>Food Cost: {{package.price_breakdown.food_cost}}</li>
+                                    <li>Other Entry Ticekts Cost: {{package.price_breakdown.entrance_tickets_cost}}</li>
+                                </ul>
+                                
+                                <!-- Additional itinerary details here -->
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                            <h1>Response Not generated due to large size, try for lesser number of packages or days</h1>
+                    {% endif %}
+                </div>
+            
+        
+        
+        
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            var content = document.getElementById(id);
+            var button = content.previousElementSibling;
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                button.classList.remove('active');
+            } else {
+                var allContents = document.querySelectorAll('.package-content');
+                var allButtons = document.querySelectorAll('.dropdown-button');
+                allContents.forEach(function(item) {
+                    item.classList.remove('show');
+                });
+                allButtons.forEach(function(btn) {
+                    btn.classList.remove('active');
+                });
+                content.classList.add('show');
+                button.classList.add('active');
+            }
+        }
+    </script>
+</body>
+
+</html>

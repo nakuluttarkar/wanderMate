@@ -13,10 +13,15 @@ from itertools import chain
 from django.db.models import Q
 from .models import FollowersCount, Image, Profile, Post, LikePost, TravelGroup, Comment, Room, Message, Preference, PreferenceOption
 from .forms import PreferenceForm
+from .utils import generate_trip_details
 from django.contrib.auth import authenticate, login
 import random
 import time 
 import pytz
+import ast
+import json
+
+
 
 def generate_otp():
     otp = ''.join(random.choices('0123456789', k = 6))
@@ -790,6 +795,62 @@ def getMessages(request, room):
 
 
     return JsonResponse({"messages":list(messages.values())})
+
+@login_required(login_url='core:signinSignup')
+def planTrip(request):
+    if request.method == 'POST':
+        place = request.POST['place']
+        start_location = request.POST['start_location']
+        number_of_people = request.POST['number_of_people']
+        budget = request.POST['budget']
+        start_Date = request.POST['trip_start_date']
+        end_date = request.POST['trip_end_date']
+        number_of_days = request.POST['number_of_days']
+        trip_types = request.POST.getlist('trip_type')
+
+        contextDict = {
+            "place": place,
+            "start_location": start_location,
+            "number_of_people": number_of_people,
+            "budget": budget,
+            "start_Date": start_Date,
+            "end_date": end_date,
+            "number_of_days": number_of_days,
+            "trip_types": trip_types
+        }
+
+        print("Place:", place)
+        print("Number of People:", number_of_people)
+        print("Trip Types:", trip_types)
+        print("Budget:", budget)
+        print("Number of Days:", number_of_days)
+
+        aiResponse = generate_trip_details(contextDict)
+        
+        print("UNIQUESTRING + ", aiResponse)
+
+        # Store the response in session
+        request.session['aiResponse'] = aiResponse
+
+        return redirect("core:packages")  
+    return render(request, "plan-trip.html")
+
+
+
+@login_required(login_url='core:signinSignup')
+def packages(request):
+    
+    aiResponse = request.session.get('aiResponse', '')
+    aiResponse = aiResponse[8:-4]
+    # response_dict = json.loads(aiResponse)
+    try:
+        aiResponse = json.loads(aiResponse)
+    except:
+        return render(request, "package.html", {"response_generated": True})
+    print("AIRESPONSE",json.dumps(aiResponse, indent=4))
+    context = {"aiResponse": aiResponse, "response_generated": True}
+
+    return render(request, "package.html", context)
 
 
 @login_required(login_url='core:signinSignup')
